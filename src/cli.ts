@@ -45,6 +45,10 @@ import ideAdapterExtension from "./extensions/ide-adapter/index.js"
 import inputHistoryExtension from "./extensions/input-history.js"
 import llmResponseLogExtension from "./extensions/llm-response-log.js"
 import configExtension from "./extensions/config/index.js"
+import chooseProjectExtension from "./extensions/choose-project/index.js"
+import soundExtension from "./extensions/sound/index.js"
+import attachExtension from "./extensions/attach/index.js"
+import deleteChatsExtension from "./extensions/delete-chats/index.js"
 import loopGuardExtension from "./extensions/loop-guard.js"
 import lspExtension from "./extensions/lsp.js"
 import mcpAdapterExtension from "./extensions/mcp-adapter/index.js"
@@ -427,6 +431,10 @@ try {
 			statsExtension,
 			...terminalUiExtensionFactories,
 			configExtension,
+			chooseProjectExtension,
+			soundExtension,
+			attachExtension,
+			deleteChatsExtension,
 			loopGuardExtension,
 			explorationGuardExtension,
 			reviewWriteGuardExtension,
