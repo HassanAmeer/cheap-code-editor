@@ -19,19 +19,21 @@ export function prepareAgentSessionFile(
 
 	const sessionId = generateId()
 	const timestamp = now().toISOString()
-	
+
 	try {
-		db.insert(sessionsTable).values({
-			id: sessionId,
-			startedAt: now(),
-			updatedAt: now(),
-			metadata: JSON.stringify({
-				type: "session",
-				version: CURRENT_SESSION_VERSION,
-				cwd,
-				parentSession: parentSessionFile
+		db.insert(sessionsTable)
+			.values({
+				id: sessionId,
+				startedAt: now(),
+				updatedAt: now(),
+				metadata: JSON.stringify({
+					type: "session",
+					version: CURRENT_SESSION_VERSION,
+					cwd,
+					parentSession: parentSessionFile,
+				}),
 			})
-		}).run()
+			.run()
 	} catch (error) {
 		console.error("Failed to write session to SQLite", error)
 	}

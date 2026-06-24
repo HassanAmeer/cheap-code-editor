@@ -25,9 +25,9 @@ import { resolve } from "node:path"
 import { lockSync, unlockSync } from "proper-lockfile"
 import { v7 as uuidv7 } from "uuid"
 
+import { asc, eq } from "drizzle-orm"
 import { db } from "../db/client.js"
 import { events as eventsTable } from "../db/schema.js"
-import { eq, asc } from "drizzle-orm"
 
 import { activateSinglePhase, settleAfterPhaseTerminal } from "./lifecycle.js"
 import { FermentStorage, resolveFermentsDir } from "./store.js"
@@ -416,13 +416,18 @@ export class FermentEventStore {
 	}
 
 	private hasEvents(id: string): boolean {
-		const eventRecord = db.select({ id: eventsTable.id }).from(eventsTable).where(eq(eventsTable.sessionId, id)).limit(1).get()
+		const eventRecord = db
+			.select({ id: eventsTable.id })
+			.from(eventsTable)
+			.where(eq(eventsTable.sessionId, id))
+			.limit(1)
+			.get()
 		return !!eventRecord
 	}
 
 	private shouldUseEvents(id: string): boolean {
 		if (!this.hasEvents(id)) return false
-		// Since SQLite records events synchronously with snapshots, 
+		// Since SQLite records events synchronously with snapshots,
 		// if events exist, they are at least as current as the snapshot.
 		// For simplicity, we always fold if events exist in the database.
 		return true
@@ -430,16 +435,18 @@ export class FermentEventStore {
 
 	private appendEvent(fermentId: string, event: FermentEvent): void {
 		try {
-			db.insert(eventsTable).values({
-				id: event.id,
-				sessionId: fermentId,
-				type: event.type,
-				timestamp: new Date(event.timestamp),
-				payload: JSON.stringify(event),
-			}).run()
+			db.insert(eventsTable)
+				.values({
+					id: event.id,
+					sessionId: fermentId,
+					type: event.type,
+					timestamp: new Date(event.timestamp),
+					payload: JSON.stringify(event),
+				})
+				.run()
 		} catch (error) {
 			// fallback in case foreign key session doesn't exist
-			console.error("Failed to append event to SQLite", error);
+			console.error("Failed to append event to SQLite", error)
 		}
 	}
 
@@ -525,9 +532,14 @@ export class FermentEventStore {
 	// ─── Fold events to reconstruct state ──────────────────────────────────────
 
 	private foldEvents(id: string): Ferment | undefined {
-		const eventRecords = db.select().from(eventsTable).where(eq(eventsTable.sessionId, id)).orderBy(asc(eventsTable.timestamp)).all()
+		const eventRecords = db
+			.select()
+			.from(eventsTable)
+			.where(eq(eventsTable.sessionId, id))
+			.orderBy(asc(eventsTable.timestamp))
+			.all()
 		if (!eventRecords || eventRecords.length === 0) return undefined
-		
+
 		let state: Ferment | undefined
 		for (const record of eventRecords) {
 			const event = JSON.parse(record.payload) as FermentEvent
