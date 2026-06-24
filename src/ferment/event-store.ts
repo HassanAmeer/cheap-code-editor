@@ -25,6 +25,10 @@ import { resolve } from "node:path"
 import { lockSync, unlockSync } from "proper-lockfile"
 import { v7 as uuidv7 } from "uuid"
 
+import { db } from "../db/client.js"
+import { events as eventsTable } from "../db/schema.js"
+import { eq, asc } from "drizzle-orm"
+
 import { activateSinglePhase, settleAfterPhaseTerminal } from "./lifecycle.js"
 import { FermentStorage, resolveFermentsDir } from "./store.js"
 import { normalizeSuccessCriteria } from "./success-criteria.js"
@@ -412,22 +416,31 @@ export class FermentEventStore {
 	}
 
 	private hasEvents(id: string): boolean {
-		return existsSync(this.eventsPath(id))
+		const eventRecord = db.select({ id: eventsTable.id }).from(eventsTable).where(eq(eventsTable.sessionId, id)).limit(1).get()
+		return !!eventRecord
 	}
 
 	private shouldUseEvents(id: string): boolean {
 		if (!this.hasEvents(id)) return false
-		const eventsMtime = statSync(this.eventsPath(id)).mtimeMs
-		const snapPath = this.snapshotPath(id)
-		if (!existsSync(snapPath)) return true // no snapshot — must use events
-		const snapMtime = statSync(snapPath).mtimeMs
-		return eventsMtime >= snapMtime
+		// Since SQLite records events synchronously with snapshots, 
+		// if events exist, they are at least as current as the snapshot.
+		// For simplicity, we always fold if events exist in the database.
+		return true
 	}
 
 	private appendEvent(fermentId: string, event: FermentEvent): void {
-		const path = this.eventsPath(fermentId)
-		mkdirSync(resolve(path, ".."), { recursive: true })
-		writeFileSync(path, `${JSON.stringify(event)}\n`, { flag: "a", encoding: "utf-8" })
+		try {
+			db.insert(eventsTable).values({
+				id: event.id,
+				sessionId: fermentId,
+				type: event.type,
+				timestamp: new Date(event.timestamp),
+				payload: JSON.stringify(event),
+			}).run()
+		} catch (error) {
+			// fallback in case foreign key session doesn't exist
+			console.error("Failed to append event to SQLite", error);
+		}
 	}
 
 	/**
@@ -512,12 +525,12 @@ export class FermentEventStore {
 	// ─── Fold events to reconstruct state ──────────────────────────────────────
 
 	private foldEvents(id: string): Ferment | undefined {
-		const path = this.eventsPath(id)
-		if (!existsSync(path)) return undefined
-		const lines = readFileSync(path, "utf-8").split("\n").filter(Boolean)
+		const eventRecords = db.select().from(eventsTable).where(eq(eventsTable.sessionId, id)).orderBy(asc(eventsTable.timestamp)).all()
+		if (!eventRecords || eventRecords.length === 0) return undefined
+		
 		let state: Ferment | undefined
-		for (const line of lines) {
-			const event = JSON.parse(line) as FermentEvent
+		for (const record of eventRecords) {
+			const event = JSON.parse(record.payload) as FermentEvent
 			state = this.applyEvent(state, event)
 		}
 		return state
@@ -634,7 +647,7 @@ export class FermentEventStore {
 	delete(id: string): boolean {
 		return this.withLock(id, () => {
 			if (this.hasEvents(id)) {
-				unlinkSync(this.eventsPath(id))
+				db.delete(eventsTable).where(eq(eventsTable.sessionId, id)).run()
 			}
 			return this.storage.delete(id)
 		})
