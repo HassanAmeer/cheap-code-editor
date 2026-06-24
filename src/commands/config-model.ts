@@ -137,8 +137,6 @@ function writeOverrides(data: any): void {
 	writeFileSync(OVERRIDES_PATH, `${JSON.stringify(data, null, 2)}\n`, "utf-8")
 }
 
-
-
 async function addCustomModel(): Promise<void> {
 	const providerSel = await clack.select<string>({
 		message: "Select provider for the custom model:",
@@ -323,7 +321,7 @@ export async function runConfigModel(_args: string[]): Promise<number> {
 	clack.intro("⚙  AI Provider & Model Configuration")
 
 	// biome-ignore lint/suspicious/noConfusingLabels: intentional outer loop label
-	outer: while (true) {
+	while (true) {
 		const envMap = readEnvFile()
 
 		// Build the combined menu: providers first, then special actions
@@ -348,7 +346,7 @@ export async function runConfigModel(_args: string[]): Promise<number> {
 			options,
 		})
 
-		if (clack.isCancel(selected) || selected === "exit") break outer
+		if (clack.isCancel(selected) || selected === "exit") break
 
 		if (selected === "show") {
 			await showConfigured()

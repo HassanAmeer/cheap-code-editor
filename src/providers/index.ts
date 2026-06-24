@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "node:fs"
-import { join } from "node:path"
 import { homedir } from "node:os"
+import { join } from "node:path"
 import type { PiModelConfig } from "../models.js"
 import { geminiModels } from "./gemini/index.js"
 import { providerKeys } from "./keys.js"
@@ -79,11 +79,11 @@ export function getCustomProvidersConfig(): Record<
 		if (existsSync(overridesPath)) {
 			overrides = JSON.parse(readFileSync(overridesPath, "utf-8"))
 		}
-	} catch (e) { }
+	} catch (e) {}
 
 	let providerOverrides = overrides.providers || {}
-	let modelOverrides = overrides.models || {}
-	let customModels = overrides.customModels || []
+	const modelOverrides = overrides.models || {}
+	const customModels = overrides.customModels || []
 
 	// Fallback to old flat provider structure if the file has no section keys
 	if (!overrides.providers && !overrides.models && !overrides.customModels) {
@@ -150,9 +150,10 @@ export function getCustomProvidersConfig(): Record<
 						piModel.contextWindow = mOver.contextWindow
 						piModel.maxTokens = Math.min(mOver.contextWindow, 8192)
 						const parts = piModel.name.split(" - ")
-						const tokensStr = mOver.contextWindow >= 1048576
-							? `${Math.round(mOver.contextWindow / 1048576)}M`
-							: `${Math.round(mOver.contextWindow / 1024)}k`
+						const tokensStr =
+							mOver.contextWindow >= 1048576
+								? `${Math.round(mOver.contextWindow / 1048576)}M`
+								: `${Math.round(mOver.contextWindow / 1024)}k`
 						if (parts.length > 1) {
 							parts[parts.length - 1] = tokensStr
 							piModel.name = parts.join(" - ")
@@ -168,7 +169,7 @@ export function getCustomProvidersConfig(): Record<
 							api: "openai-completions",
 							baseUrl: mOver.baseUrl || p.keyData.baseURL || p.defaultBase,
 							apiKey: mOver.apiKey || p.keyData.apiKey || "unset",
-							models: [piModel]
+							models: [piModel],
 						}
 						return null
 					}
@@ -181,9 +182,10 @@ export function getCustomProvidersConfig(): Record<
 		// Process custom models for this provider
 		for (const cm of customModels) {
 			if (cm.provider === p.id) {
-				const tokensStr = cm.contextWindow >= 1048576
-					? `${Math.round(cm.contextWindow / 1048576)}M`
-					: `${Math.round(cm.contextWindow / 1024)}k`
+				const tokensStr =
+					cm.contextWindow >= 1048576
+						? `${Math.round(cm.contextWindow / 1048576)}M`
+						: `${Math.round(cm.contextWindow / 1024)}k`
 				const showProvider = process.env.SHOW_PROVIDER_NAMES !== "false"
 				const displayName = showProvider
 					? `${cm.name || cm.id} (${p.id}) - ${tokensStr}`
@@ -203,13 +205,13 @@ export function getCustomProvidersConfig(): Record<
 					// @ts-ignore
 					_tokens: tokensStr,
 					// @ts-ignore
-					_support: cm.vision ? ["text", "image", "vision"] : ["text", "code"]
+					_support: cm.vision ? ["text", "image", "vision"] : ["text", "code"],
 				}
 				// Store in module-level map
 				modelInfoMap.set(cm.id, {
 					category: cm.large ? "sometimes slow" : "Fast",
 					tokens: tokensStr,
-					support: cm.vision ? ["text", "image", "vision"] : ["text", "code"]
+					support: cm.vision ? ["text", "image", "vision"] : ["text", "code"],
 				})
 
 				if (cm.apiKey || cm.baseUrl) {
@@ -219,7 +221,7 @@ export function getCustomProvidersConfig(): Record<
 						api: "openai-completions",
 						baseUrl: cm.baseUrl || p.keyData.baseURL || p.defaultBase,
 						apiKey: cm.apiKey || p.keyData.apiKey || "unset",
-						models: [customPiModel]
+						models: [customPiModel],
 					}
 				} else {
 					activeModels.push(customPiModel)

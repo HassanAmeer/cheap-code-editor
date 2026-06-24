@@ -49,7 +49,6 @@ function sortModels(models: ModelMetadata[]): ModelMetadata[] {
 	return [...serverless, ...rest]
 }
 
-
 export interface PiModelConfig {
 	id: string
 	name: string
@@ -90,7 +89,6 @@ function metadataToModel(m: ModelMetadata): PiModelConfig {
 	}
 }
 
-
 export interface ModelsConfigResult {
 	models: ModelMetadata[]
 }
@@ -120,7 +118,6 @@ function extractModelsFromProviders(providers: Record<string, { models?: PiModel
 	}
 	return result
 }
-
 
 function readExistingProviders(modelsJsonPath: string): Record<string, unknown> {
 	if (!existsSync(modelsJsonPath)) return {}
@@ -157,8 +154,6 @@ export function syncProviderModels(
 	config.providers[providerId] = { ...providerConfig, models }
 	writeFileSync(modelsJsonPath, JSON.stringify(config, null, "\t"), "utf-8")
 }
-
-
 
 /**
  * Fetch available models from the cheap metadata API and write the

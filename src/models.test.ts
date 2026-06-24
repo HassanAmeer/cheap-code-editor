@@ -1,8 +1,8 @@
-import { describe, expect, it } from "vitest"
-import { updateModelsConfig } from "./models.js"
-import { join } from "node:path"
 import { mkdtempSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
+import { join } from "node:path"
+import { describe, expect, it } from "vitest"
+import { updateModelsConfig } from "./models.js"
 
 describe("updateModelsConfig", () => {
 	it("returns empty models when no local config exists", async () => {

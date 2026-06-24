@@ -141,7 +141,7 @@ describe("writeEnvKey", () => {
 	})
 
 	it("preserves comments in the file", () => {
-		writeFileSync(envPath, `# comment\nFOO=bar\n`, "utf-8")
+		writeFileSync(envPath, "# comment\nFOO=bar\n", "utf-8")
 		writeEnvKey(envPath, "NEW_KEY", "val")
 		const raw = readFileSync(envPath, "utf-8")
 		expect(raw).toContain("# comment")

@@ -1,7 +1,7 @@
-import { InteractiveMode, ModelSelectorComponent } from "@earendil-works/pi-coding-agent"
-import { Text, Spacer, getKeybindings } from "@earendil-works/pi-tui"
 import { modelsAreEqual } from "@earendil-works/pi-ai"
-import { fg, ANSI, semanticFg } from "./ansi.js"
+import { InteractiveMode, ModelSelectorComponent } from "@earendil-works/pi-coding-agent"
+import { Spacer, Text, getKeybindings } from "@earendil-works/pi-tui"
+import { ANSI, fg, semanticFg } from "./ansi.js"
 import { modelInfoMap } from "./providers/index.js"
 
 // ---------------------------------------------------------------------------
@@ -10,7 +10,10 @@ import { modelInfoMap } from "./providers/index.js"
 // biome-ignore lint/suspicious/noExplicitAny: private upstream prototype mutation
 const imProto = InteractiveMode.prototype as any
 imProto.showOAuthSelector = async function (this: any, mode: "login" | "logout") {
-	this.ui?.notify(`${mode === "login" ? "Login" : "Logout"} is disabled. Use /config model to configure providers.`, "info")
+	this.ui?.notify(
+		`${mode === "login" ? "Login" : "Logout"} is disabled. Use /config model to configure providers.`,
+		"info",
+	)
 }
 
 // ---------------------------------------------------------------------------
@@ -56,7 +59,8 @@ modelSelectorProto.loadModels = async function (this: any) {
 	this.filteredModels = [...this.activeModels]
 
 	const currentIndex = this.filteredModels.findIndex((item: any) => modelsAreEqual(this.currentModel, item.model))
-	this.selectedIndex = currentIndex >= 0 ? currentIndex : Math.min(this.selectedIndex, Math.max(0, this.filteredModels.length - 1))
+	this.selectedIndex =
+		currentIndex >= 0 ? currentIndex : Math.min(this.selectedIndex, Math.max(0, this.filteredModels.length - 1))
 }
 
 const originalFilterModels = modelSelectorProto.filterModels
@@ -67,19 +71,20 @@ modelSelectorProto.filterModels = function (this: any, term: string) {
 		const modelId = item.model?.id || item.id || ""
 		const info = modelInfoMap.get(modelId)
 		const cat = info?.category ?? (item.model as any)?._category ?? ""
-		item.provider = (cat === "Fast" || cat === "Grid") ? "Fast" : "Sometimes Slow"
+		item.provider = cat === "Fast" || cat === "Grid" ? "Fast" : "Sometimes Slow"
 	}
 	this.filteredModels.sort(sortFn)
 
 	const currentIndex = this.filteredModels.findIndex((item: any) => modelsAreEqual(this.currentModel, item.model))
-	this.selectedIndex = currentIndex >= 0 ? currentIndex : Math.min(this.selectedIndex, Math.max(0, this.filteredModels.length - 1))
+	this.selectedIndex =
+		currentIndex >= 0 ? currentIndex : Math.min(this.selectedIndex, Math.max(0, this.filteredModels.length - 1))
 }
 
 const originalHandleInput = modelSelectorProto.handleInput
 
 modelSelectorProto.handleInput = function (this: any, keyData: any) {
 	const kb = getKeybindings()
-	
+
 	if (kb.matches(keyData, "tui.input.tab")) {
 		if (this.scopedModelItems.length > 0) {
 			const nextScope = this.scope === "all" ? "scoped" : "all"
@@ -116,7 +121,7 @@ modelSelectorProto.handleInput = function (this: any, keyData: any) {
 		}
 		if (targetY !== -1) {
 			let best = -1
-			let bestDist = Infinity
+			let bestDist = Number.POSITIVE_INFINITY
 			for (let i = 0; i < this.selectableItemsCoords.length; i++) {
 				if (this.selectableItemsCoords[i].y === targetY) {
 					const dist = Math.abs(this.selectableItemsCoords[i].x - currentItem.x)
@@ -141,7 +146,7 @@ modelSelectorProto.handleInput = function (this: any, keyData: any) {
 		}
 		if (targetY !== -1) {
 			let bestIdx = -1
-			let bestDist = Infinity
+			let bestDist = Number.POSITIVE_INFINITY
 			for (let i = this.selectedIndex + 1; i < this.selectableItemsCoords.length; i++) {
 				if (this.selectableItemsCoords[i].y === targetY) {
 					const dist = Math.abs(this.selectableItemsCoords[i].x - currentItem.x)
@@ -162,7 +167,10 @@ modelSelectorProto.handleInput = function (this: any, keyData: any) {
 			this.updateList()
 		}
 	} else if (keyData.name === "right") {
-		if (this.selectedIndex < this.selectableItemsCoords.length - 1 && this.selectableItemsCoords[this.selectedIndex + 1].y === currentItem.y) {
+		if (
+			this.selectedIndex < this.selectableItemsCoords.length - 1 &&
+			this.selectableItemsCoords[this.selectedIndex + 1].y === currentItem.y
+		) {
 			this.selectedIndex++
 			this.updateList()
 		}
@@ -205,7 +213,7 @@ modelSelectorProto.updateList = function (this: any) {
 	const groupsMap = new Map<string, any[]>()
 	for (const item of this.filteredModels) {
 		if (!groupsMap.has(item.provider)) groupsMap.set(item.provider, [])
-		groupsMap.get(item.provider)!.push(item)
+		groupsMap.get(item.provider)?.push(item)
 	}
 
 	this.selectableItemsCoords = []
@@ -253,7 +261,7 @@ modelSelectorProto.updateList = function (this: any) {
 	}
 
 	const visibleRows = gridRows.slice(this.scrollOffset, this.scrollOffset + maxVisibleRows)
-	
+
 	for (const row of visibleRows) {
 		if (row.type === "heading") {
 			this.listContainer.addChild(new Text(fg(ANSI.accent, `[ ${row.text} ]`), 0, 0))
@@ -272,15 +280,16 @@ modelSelectorProto.updateList = function (this: any) {
 				const prefix = isSelected ? fg(ANSI.accent, "> ") : "  "
 
 				// Display name (already includes provider in parentheses)
-				const displayName = item._isMultiModel ? "multi-model" : (item.model.name || item.id)
+				const displayName = item._isMultiModel ? "multi-model" : item.model.name || item.id
 				const nameColor = isSelected ? fg(ANSI.accent, displayName) : fg(ANSI.dim, displayName)
 
 				// Tokens from modelInfoMap (survives round-trip) or fall back to _tokens / contextWindow
-				const modelId = item._isMultiModel ? "" : (item.model?.id || item.id || "")
+				const modelId = item._isMultiModel ? "" : item.model?.id || item.id || ""
 				const mapInfo = modelInfoMap.get(modelId)
-				const tokensLabel: string = mapInfo?.tokens
-					?? (item.model as any)._tokens
-					?? (() => {
+				const tokensLabel: string =
+					mapInfo?.tokens ??
+					(item.model as any)._tokens ??
+					(() => {
 						const n = item.model.contextWindow || 0
 						return n >= 1048576 ? `${Math.round(n / 1048576)}M` : n >= 1024 ? `${Math.round(n / 1024)}k` : "8k"
 					})()
@@ -292,7 +301,7 @@ modelSelectorProto.updateList = function (this: any) {
 				const supportText = supportArr.length > 0 ? ` [${supportArr.join(", ")}]` : ""
 				const supportColor = isSelected ? fg("33", supportText) : fg(ANSI.dim, supportText)
 
-				const checkmark = isCurrent ? semanticFg("success") + " ✓" : ""
+				const checkmark = isCurrent ? `${semanticFg("success")} ✓` : ""
 
 				const cellText = `${prefix}${nameColor}${tokenColor}${supportColor}${checkmark}`
 
@@ -312,7 +321,7 @@ modelSelectorProto.updateList = function (this: any) {
 	if (this.scrollOffset + maxVisibleRows < gridRows.length) {
 		this.listContainer.addChild(new Text(fg(ANSI.dim, "  ▼  (More models below...)"), 0, 0))
 	}
-	
+
 	const selected = this.filteredModels[this.selectedIndex]
 	if (selected) {
 		this.listContainer.addChild(new Spacer(1))

@@ -1,7 +1,7 @@
-import type { ExtensionAPI, ExtensionCommandContext } from "@earendil-works/pi-coding-agent"
 import * as fs from "node:fs/promises"
-import * as path from "node:path"
 import * as os from "node:os"
+import * as path from "node:path"
+import type { ExtensionAPI, ExtensionCommandContext } from "@earendil-works/pi-coding-agent"
 
 async function runAttach(args: string, ctx: ExtensionCommandContext): Promise<void> {
 	if (os.platform() !== "darwin") {
@@ -16,16 +16,19 @@ async function runAttach(args: string, ctx: ExtensionCommandContext): Promise<vo
 				POSIX path of theFile
 			end tell
 		`
-		const { stdout } = await require("node:util").promisify(require("node:child_process").exec)(`osascript -e '${script.replace(/\n/g, "' -e '").trim()}'`)
+		const { stdout } = await require("node:util").promisify(require("node:child_process").exec)(
+			`osascript -e '${script.replace(/\n/g, "' -e '").trim()}'`,
+		)
 		const fullPath = stdout.trim()
-		
+
 		if (fullPath) {
 			const currentText = ctx.ui.getEditorText()
 			const space = currentText.length > 0 && !currentText.endsWith(" ") ? " " : ""
 			ctx.ui.setEditorText(currentText + space + fullPath)
 			ctx.ui.notify(`Attached: ${path.basename(fullPath)}`, "info")
 		}
-	} catch (e: any) {
+	} catch (err) {
+		const e = err as { code?: number; message: string }
 		if (e.code === 1) {
 			ctx.ui.notify("File selection cancelled.", "info")
 		} else {

@@ -1,6 +1,6 @@
-import type { ExtensionAPI, ExtensionCommandContext } from "@earendil-works/pi-coding-agent"
 import * as fs from "node:fs/promises"
 import * as path from "node:path"
+import type { ExtensionAPI, ExtensionCommandContext } from "@earendil-works/pi-coding-agent"
 
 async function runDeleteChats(args: string, ctx: ExtensionCommandContext): Promise<void> {
 	const agentDir = process.env.CHEAP_CODING_AGENT_DIR
@@ -19,10 +19,10 @@ async function runDeleteChats(args: string, ctx: ExtensionCommandContext): Promi
 		return
 	}
 
-	const choice = await ctx.ui.select(
-		"⚠️ Are you sure you want to delete all saved chats? This cannot be undone.",
-		["❌ Cancel", "✅ Delete All"]
-	)
+	const choice = await ctx.ui.select("⚠️ Are you sure you want to delete all saved chats? This cannot be undone.", [
+		"❌ Cancel",
+		"✅ Delete All",
+	])
 
 	if (choice !== "✅ Delete All") {
 		ctx.ui.notify("Cancelled", "info")
@@ -33,11 +33,12 @@ async function runDeleteChats(args: string, ctx: ExtensionCommandContext): Promi
 		// Delete the sessions directory and its contents
 		await fs.rm(sessionsDir, { recursive: true, force: true })
 		ctx.ui.notify("All saved chats have been deleted.", "info")
-		
-		// Start a new session to ensure the current session state doesn't crash 
+
+		// Start a new session to ensure the current session state doesn't crash
 		// and it recreates a fresh session environment.
 		await ctx.newSession()
-	} catch (e: any) {
+	} catch (err) {
+		const e = err as { message: string }
 		ctx.ui.notify(`Failed to delete chats: ${e.message}`, "error")
 	}
 }

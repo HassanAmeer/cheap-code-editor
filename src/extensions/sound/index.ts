@@ -1,7 +1,7 @@
-import type { ExtensionAPI } from "@earendil-works/pi-coding-agent"
 import * as fs from "node:fs/promises"
-import * as path from "node:path"
 import * as os from "node:os"
+import * as path from "node:path"
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent"
 
 const envPath = path.join(os.homedir(), ".local", "share", "cheap", ".env")
 
@@ -21,7 +21,7 @@ async function writeSoundState(enabled: boolean): Promise<void> {
 	} catch {
 		// file might not exist
 	}
-	
+
 	const lines = content.split("\n")
 	const newLines = []
 	let found = false
@@ -36,14 +36,14 @@ async function writeSoundState(enabled: boolean): Promise<void> {
 	if (!found) {
 		newLines.push(`CHEAP_SOUND=${enabled}`)
 	}
-	
+
 	await fs.writeFile(envPath, newLines.join("\n"), "utf-8")
 	process.env.CHEAP_SOUND = enabled.toString()
 }
 
 export default function soundExtension(pi: ExtensionAPI): void {
 	// Initialize process.env state synchronously so it's ready, but also read asynchronously to ensure correctness
-	readSoundState().then(enabled => {
+	readSoundState().then((enabled) => {
 		process.env.CHEAP_SOUND = enabled.toString()
 	})
 
@@ -56,7 +56,7 @@ export default function soundExtension(pi: ExtensionAPI): void {
 			const currentState = process.env.CHEAP_SOUND === "true"
 			const newState = !currentState
 			await writeSoundState(newState)
-			
+
 			ctx.ui.notify(`Sound Notifications turned ${newState ? "ON" : "OFF"}`, "info")
 			if (newState) {
 				// Play a test sound
@@ -64,7 +64,7 @@ export default function soundExtension(pi: ExtensionAPI): void {
 			}
 		},
 	})
-	
+
 	pi.on("agent_end", async () => {
 		if (process.env.CHEAP_SOUND === "true") {
 			process.stdout.write("\x07")
