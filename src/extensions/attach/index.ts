@@ -2,8 +2,27 @@ import * as fs from "node:fs/promises"
 import * as os from "node:os"
 import * as path from "node:path"
 import type { ExtensionAPI, ExtensionCommandContext } from "@earendil-works/pi-coding-agent"
+import { setPendingAttachmentIndicator } from "../ui.js"
+
+let pendingFiles: string[] = []
+
+function updateIndicator() {
+	if (pendingFiles.length === 0) {
+		setPendingAttachmentIndicator(null)
+	} else {
+		const names = pendingFiles.map((f) => path.basename(f)).join(", ")
+		setPendingAttachmentIndicator(`📎 Attached: ${names}`)
+	}
+}
 
 async function runAttach(args: string, ctx: ExtensionCommandContext): Promise<void> {
+	if (args.trim() === "clear") {
+		pendingFiles = []
+		updateIndicator()
+		ctx.ui.notify("Attachments cleared.", "info")
+		return
+	}
+
 	if (os.platform() !== "darwin") {
 		ctx.ui.notify("Native popup is only supported on macOS", "error")
 		return
@@ -21,10 +40,9 @@ async function runAttach(args: string, ctx: ExtensionCommandContext): Promise<vo
 		)
 		const fullPath = stdout.trim()
 
-		if (fullPath) {
-			const currentText = ctx.ui.getEditorText()
-			const space = currentText.length > 0 && !currentText.endsWith(" ") ? " " : ""
-			ctx.ui.setEditorText(currentText + space + fullPath)
+		if (fullPath && !pendingFiles.includes(fullPath)) {
+			pendingFiles.push(fullPath)
+			updateIndicator()
 			ctx.ui.notify(`Attached: ${path.basename(fullPath)}`, "info")
 		}
 	} catch (err) {
@@ -41,5 +59,29 @@ export default function attachExtension(pi: ExtensionAPI): void {
 	pi.registerCommand("attach", {
 		description: "Attach an image or file",
 		handler: runAttach,
+	})
+
+	pi.registerCommand("clear_attach", {
+		description: "Clear attached files",
+		handler: async () => {
+			pendingFiles = []
+			updateIndicator()
+		},
+	})
+
+	pi.on("session_start", () => {
+		pendingFiles = []
+		updateIndicator()
+	})
+
+	pi.on("input", (event) => {
+		if (pendingFiles.length === 0) return undefined
+
+		const attachments = pendingFiles.join("\n")
+		pendingFiles = []
+		updateIndicator()
+
+		const text = `[Attached files:\n${attachments}]\n\n${event.text}`
+		return { action: "transform", text, images: event.images }
 	})
 }

@@ -163,6 +163,13 @@ export function setPendingImageIndicator(text: string | null): void {
 }
 
 /**
+ * Show or clear a short status string for pending file attachments.
+ */
+export function setPendingAttachmentIndicator(text: string | null): void {
+	currentEditor?.setPendingAttachmentIndicator(text)
+}
+
+/**
  * Show or clear a short session label right-aligned on the prompt's first row.
  * Used by the teleport extension to surface a persistent "(host)" indicator
  * while attached to a remote worker. Pass `null` to clear.

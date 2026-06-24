@@ -25,6 +25,7 @@ export class PromptEditor extends CustomEditor {
 	private readonly appTheme: Theme
 	private readonly kb: KeybindingsManager
 	private expandHandler?: () => void
+	private _pendingAttachmentIndicator: string | null = null
 	private _pendingImageIndicator: string | null = null
 	private _sessionIndicator: string | null = null
 
@@ -51,6 +52,15 @@ export class PromptEditor extends CustomEditor {
 	}
 
 	/**
+	 * Show a short status string for attached files.
+	 */
+	setPendingAttachmentIndicator(text: string | null) {
+		if (this._pendingAttachmentIndicator === text) return
+		this._pendingAttachmentIndicator = text
+		this.tui.requestRender()
+	}
+
+	/**
 	 * Show a short session label in its own row just inside the editor's top
 	 * border. Used by the teleport extension to remind the user they are
 	 * connected to a remote worker. Pass `null` to clear.
@@ -68,6 +78,7 @@ export class PromptEditor extends CustomEditor {
 	private combinedIndicator(): string | null {
 		const parts: string[] = []
 		if (this._sessionIndicator) parts.push(this._sessionIndicator)
+		if (this._pendingAttachmentIndicator) parts.push(this._pendingAttachmentIndicator)
 		if (this._pendingImageIndicator) parts.push(this._pendingImageIndicator)
 		return parts.length > 0 ? parts.join(" ") : null
 	}
