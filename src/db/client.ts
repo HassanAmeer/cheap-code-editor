@@ -1,26 +1,23 @@
 import { homedir } from "node:os"
 import { join } from "node:path"
-import Database from "better-sqlite3"
-import { drizzle } from "drizzle-orm/better-sqlite3"
+import { Database } from "bun:sqlite"
+import { drizzle } from "drizzle-orm/bun-sqlite"
 import * as schema from "./schema.js"
 
 // The path where cheap.db will be stored.
 // Ideally, this should come from a config, but for now we put it in the user's home directory under .cheap
 const DB_PATH = join(homedir(), ".cheap", "cheap.db")
 
-let sqliteDb: Database.Database
+let sqliteDb: Database
 
 try {
-	// Initialize the native SQLite database
-	sqliteDb = new Database(DB_PATH, {
-		// Increase timeout to avoid lock issues
-		timeout: 5000,
-	})
+	// Initialize the native Bun SQLite database
+	sqliteDb = new Database(DB_PATH, { create: true })
 
 	// Enable WAL mode for better concurrency and performance
-	sqliteDb.pragma("journal_mode = WAL")
+	sqliteDb.exec("PRAGMA journal_mode = WAL;")
 	// Synchronous mode normal is fast and safe with WAL
-	sqliteDb.pragma("synchronous = NORMAL")
+	sqliteDb.exec("PRAGMA synchronous = NORMAL;")
 } catch (error) {
 	console.error(`Failed to connect to SQLite at ${DB_PATH}:`, error)
 	throw error
