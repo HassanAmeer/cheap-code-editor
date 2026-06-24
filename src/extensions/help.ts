@@ -34,6 +34,7 @@ const HELP_ROWS: HelpRow[] = [
 	{ kind: "entry", key: "/tags", desc: "Manage usage tracking tags" },
 	{ kind: "entry", key: "/tips", desc: "Show all tips" },
 	{ kind: "entry", key: "/help", desc: "Show this help" },
+	{ kind: "entry", key: "/voice", desc: "Speak and transcribe directly to the chat" },
 	{ kind: "entry", key: "/exit", desc: "Exit the application" },
 ]
 

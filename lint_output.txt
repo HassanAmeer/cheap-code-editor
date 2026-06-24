@@ -1,0 +1,254 @@
+
+> @cheap-dev/cli@0.0.0 lint /Users/mac/Documents/react/cli/cheap
+> biome check src/ scripts/
+
+src/utils/trace-id-export.test.ts:194:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    192 │ 		const match = html.match(/<script id="session-data" type="application\/json">([\s\S]*?)<\/script>/)
+    193 │ 		expect(match).not.toBeNull()
+  > 194 │ 		// biome-ignore lint/style/noNonNullAssertion: checked by not.toBeNull() above
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    195 │ 		const base64 = match![1]
+    196 │ 		const json = Buffer.from(base64, "base64").toString("utf-8")
+  
+
+src/cli.ts:143:1 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    141 │ // Monkey-patch AgentSession.prototype.exportToJsonl so ALL JSONL exports
+    142 │ // (interactive, ACP, and teleport mode) get trace IDs injected inline.
+  > 143 │ // biome-ignore lint/suspicious/noExplicitAny: monkey-patching an abstract class prototype
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    144 │ const _origExportToJsonl = (AgentSession as any).prototype.exportToJsonl
+    145 │ // biome-ignore lint/suspicious/noExplicitAny: monkey-patching an abstract class prototype
+  
+
+src/cli.ts:145:1 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    143 │ // biome-ignore lint/suspicious/noExplicitAny: monkey-patching an abstract class prototype
+    144 │ const _origExportToJsonl = (AgentSession as any).prototype.exportToJsonl
+  > 145 │ // biome-ignore lint/suspicious/noExplicitAny: monkey-patching an abstract class prototype
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    146 │ ;(AgentSession as any).prototype.exportToJsonl = function (outputPath?: string) {
+    147 │ 	const filePath = _origExportToJsonl.call(this, outputPath)
+  
+
+src/cli.ts:158:1 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    156 │ // Monkey-patch AgentSession.prototype.exportToHtml so HTML exports get
+    157 │ // trace IDs injected into assistant message entries the same way JSONL does.
+  > 158 │ // biome-ignore lint/suspicious/noExplicitAny: monkey-patching an abstract class prototype
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    159 │ const _origExportToHtml = (AgentSession as any).prototype.exportToHtml
+    160 │ // biome-ignore lint/suspicious/noExplicitAny: monkey-patching an abstract class prototype
+  
+
+src/cli.ts:160:1 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    158 │ // biome-ignore lint/suspicious/noExplicitAny: monkey-patching an abstract class prototype
+    159 │ const _origExportToHtml = (AgentSession as any).prototype.exportToHtml
+  > 160 │ // biome-ignore lint/suspicious/noExplicitAny: monkey-patching an abstract class prototype
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    161 │ ;(AgentSession as any).prototype.exportToHtml = async function (outputPath?: string) {
+    162 │ 	const filePath = await _origExportToHtml.call(this, outputPath)
+  
+
+src/commands/setup-tools.test.ts:91:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    89 │ 		vi.mocked(updateModelsConfig).mockResolvedValue({
+    90 │ 			models: [{ id: "kimi-k2.5" }],
+  > 91 │ 			// biome-ignore lint/suspicious/noExplicitAny: test data
+       │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    92 │ 		} as any)
+    93 │ 		vi.mocked(applyToolConfigs).mockResolvedValue({ successes: ["Cursor"], failures: [] })
+  
+
+src/commands/setup-tools.test.ts:104:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    102 │ 		vi.mocked(updateModelsConfig).mockResolvedValue({
+    103 │ 			models: [{ id: "kimi-k2.5" }],
+  > 104 │ 			// biome-ignore lint/suspicious/noExplicitAny: test data
+        │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    105 │ 		} as any)
+    106 │ 		vi.mocked(applyToolConfigs).mockResolvedValue({
+  
+
+src/commands/setup-tools.test.ts:128:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    126 │ 		vi.mocked(updateModelsConfig).mockResolvedValue({
+    127 │ 			models: [{ id: "kimi-k2.5" }],
+  > 128 │ 			// biome-ignore lint/suspicious/noExplicitAny: test data
+        │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    129 │ 		} as any)
+    130 │ 		vi.mocked(applyToolConfigs).mockResolvedValue({ successes: ["Cursor"], failures: [] })
+  
+
+src/commands/setup-tools.test.ts:145:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    143 │ 		vi.mocked(updateModelsConfig).mockResolvedValue({
+    144 │ 			models: [{ id: "kimi-k2.5" }],
+  > 145 │ 			// biome-ignore lint/suspicious/noExplicitAny: test data
+        │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    146 │ 		} as any)
+    147 │ 		vi.mocked(applyToolConfigs).mockResolvedValue({ successes: ["Cursor"], failures: [] })
+  
+
+src/commands/setup-tools.test.ts:168:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    166 │ 		vi.mocked(updateModelsConfig).mockResolvedValue({
+    167 │ 			models: [{ id: "kimi-k2.5" }],
+  > 168 │ 			// biome-ignore lint/suspicious/noExplicitAny: test data
+        │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    169 │ 		} as any)
+    170 │ 		vi.mocked(applyToolConfigs).mockResolvedValue({ successes: ["Cursor"], failures: [] })
+  
+
+src/commands/setup-tools.test.ts:205:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    203 │ 		vi.mocked(updateModelsConfig).mockResolvedValue({
+    204 │ 			models: [{ id: "kimi-k2.5" }],
+  > 205 │ 			// biome-ignore lint/suspicious/noExplicitAny: test data
+        │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    206 │ 		} as any)
+    207 │ 		vi.mocked(applyToolConfigs).mockResolvedValue({
+  
+
+src/commands/config-model.ts:323:2 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    321 │ 	clack.intro("⚙  AI Provider & Model Configuration")
+    322 │ 
+  > 323 │ 	// biome-ignore lint/suspicious/noConfusingLabels: intentional outer loop label
+        │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    324 │ 	while (true) {
+    325 │ 		const envMap = readEnvFile()
+  
+
+src/extensions/agents/manager/agent-manager.ts:235:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    233 │ 	private drainQueue() {
+    234 │ 		while (this.queue.length > 0 && this.runningBackground < this.maxConcurrent) {
+  > 235 │ 			// biome-ignore lint/style/noNonNullAssertion: shift() is guaranteed non-undefined inside while(length > 0) loop
+        │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    236 │ 			const next = this.queue.shift()!
+    237 │ 			const record = this.agents.get(next.id)
+  
+
+src/extensions/agents/manager/agent-manager.ts:265:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    263 │ 	): Promise<AgentRecord> {
+    264 │ 		const id = this.spawn(pi, ctx, type, prompt, { ...options, isBackground: false })
+  > 265 │ 		// biome-ignore lint/style/noNonNullAssertion: spawn() just inserted this id into the agents map
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    266 │ 		const record = this.agents.get(id)!
+    267 │ 		await record.promise
+  
+
+src/extensions/agents/index.ts:782:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    781 │ 	function getModelLabelFromConfig(model: string): string {
+  > 782 │ 		// biome-ignore lint/style/noNonNullAssertion: split() of a string containing "/" always yields >=2 elements
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    783 │ 		const name = model.includes("/") ? model.split("/").pop()! : model
+    784 │ 		return name.replace(/-\d{8}$/, "")
+  
+
+src/extensions/curator/review.ts:348:1 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    346 │ with no corrections and no reusable technique emerged, say "Nothing to save." and stop. Otherwise, act.`
+    347 │ 
+  > 348 │ // biome-ignore lint/suspicious/noExplicitAny: messages type not exported from pi-coding-agent
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    349 │ function serializeTranscript(messages: any[]): string {
+    350 │ 	const llm = convertToLlm(messages)
+  
+
+src/extensions/curator/review.ts:393:2 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    391 │ 	model: string
+    392 │ 	skillsDir: string
+  > 393 │ 	// biome-ignore lint/suspicious/noExplicitAny: messages type not exported from pi-coding-agent
+        │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    394 │ 	messages: any[]
+    395 │ }
+  
+
+src/extensions/disabled/tool-result-pruning.test.ts:214:5 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    212 │ 			toolName: "bash",
+    213 │ 			content: [
+  > 214 │ 				// biome-ignore lint/suspicious/noExplicitAny: image block not in TextContent union
+        │ 				^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    215 │ 				{ type: "image", source: { type: "base64", mediaType: "image/png", data: "abc" } } as any,
+    216 │ 				{ type: "text", text: bigText },
+  
+
+src/extensions/ferment/gate-validation.ts:54:1 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    52 │ }
+    53 │ 
+  > 54 │ // biome-ignore lint/suspicious/noExplicitAny: prepareArguments runs on raw LLM JSON; return must satisfy Static<TParams> for any gate schema.
+       │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    55 │ export function assertGateFieldsPresent(args: unknown): any {
+    56 │ 	if (args == null || typeof args !== "object") return args
+  
+
+src/extensions/ferment/scoping-flow.integration.test.ts:27:2 suppressions/unused ━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    25 │ interface RegisteredTool {
+    26 │ 	name: string
+  > 27 │ 	// biome-ignore lint/suspicious/noExplicitAny: mock harness
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    28 │ 	execute: (toolCallId: string, params: any, signal?: AbortSignal, onUpdate?: any, ctx?: any) => Promise<any>
+    29 │ }
+  
+
+The number of diagnostics exceeds the number allowed by Biome.
+Diagnostics not shown: 68.
+Checked 851 files in 2s. No fixes applied.
+Found 1 error.
+Found 87 warnings.
+check ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Some errors were emitted while running checks.
+  
+
+ ELIFECYCLE  Command failed with exit code 1.

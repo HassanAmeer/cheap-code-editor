@@ -1,0 +1,1054 @@
+src/utils/trace-id-export.test.ts:194:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    192 │ 		const match = html.match(/<script id="session-data" type="application\/json">([\s\S]*?)<\/script>/)
+    193 │ 		expect(match).not.toBeNull()
+  > 194 │ 		// biome-ignore lint/style/noNonNullAssertion: checked by not.toBeNull() above
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    195 │ 		const base64 = match![1]
+    196 │ 		const json = Buffer.from(base64, "base64").toString("utf-8")
+  
+
+src/cli.ts:143:1 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    141 │ // Monkey-patch AgentSession.prototype.exportToJsonl so ALL JSONL exports
+    142 │ // (interactive, ACP, and teleport mode) get trace IDs injected inline.
+  > 143 │ // biome-ignore lint/suspicious/noExplicitAny: monkey-patching an abstract class prototype
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    144 │ const _origExportToJsonl = (AgentSession as any).prototype.exportToJsonl
+    145 │ // biome-ignore lint/suspicious/noExplicitAny: monkey-patching an abstract class prototype
+  
+
+src/cli.ts:145:1 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    143 │ // biome-ignore lint/suspicious/noExplicitAny: monkey-patching an abstract class prototype
+    144 │ const _origExportToJsonl = (AgentSession as any).prototype.exportToJsonl
+  > 145 │ // biome-ignore lint/suspicious/noExplicitAny: monkey-patching an abstract class prototype
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    146 │ ;(AgentSession as any).prototype.exportToJsonl = function (outputPath?: string) {
+    147 │ 	const filePath = _origExportToJsonl.call(this, outputPath)
+  
+
+src/cli.ts:158:1 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    156 │ // Monkey-patch AgentSession.prototype.exportToHtml so HTML exports get
+    157 │ // trace IDs injected into assistant message entries the same way JSONL does.
+  > 158 │ // biome-ignore lint/suspicious/noExplicitAny: monkey-patching an abstract class prototype
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    159 │ const _origExportToHtml = (AgentSession as any).prototype.exportToHtml
+    160 │ // biome-ignore lint/suspicious/noExplicitAny: monkey-patching an abstract class prototype
+  
+
+src/cli.ts:160:1 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    158 │ // biome-ignore lint/suspicious/noExplicitAny: monkey-patching an abstract class prototype
+    159 │ const _origExportToHtml = (AgentSession as any).prototype.exportToHtml
+  > 160 │ // biome-ignore lint/suspicious/noExplicitAny: monkey-patching an abstract class prototype
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    161 │ ;(AgentSession as any).prototype.exportToHtml = async function (outputPath?: string) {
+    162 │ 	const filePath = await _origExportToHtml.call(this, outputPath)
+  
+
+src/commands/config-model.ts:323:2 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    321 │ 	clack.intro("⚙  AI Provider & Model Configuration")
+    322 │ 
+  > 323 │ 	// biome-ignore lint/suspicious/noConfusingLabels: intentional outer loop label
+        │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    324 │ 	while (true) {
+    325 │ 		const envMap = readEnvFile()
+  
+
+src/commands/setup-tools.test.ts:91:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    89 │ 		vi.mocked(updateModelsConfig).mockResolvedValue({
+    90 │ 			models: [{ id: "kimi-k2.5" }],
+  > 91 │ 			// biome-ignore lint/suspicious/noExplicitAny: test data
+       │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    92 │ 		} as any)
+    93 │ 		vi.mocked(applyToolConfigs).mockResolvedValue({ successes: ["Cursor"], failures: [] })
+  
+
+src/commands/setup-tools.test.ts:104:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    102 │ 		vi.mocked(updateModelsConfig).mockResolvedValue({
+    103 │ 			models: [{ id: "kimi-k2.5" }],
+  > 104 │ 			// biome-ignore lint/suspicious/noExplicitAny: test data
+        │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    105 │ 		} as any)
+    106 │ 		vi.mocked(applyToolConfigs).mockResolvedValue({
+  
+
+src/commands/setup-tools.test.ts:128:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    126 │ 		vi.mocked(updateModelsConfig).mockResolvedValue({
+    127 │ 			models: [{ id: "kimi-k2.5" }],
+  > 128 │ 			// biome-ignore lint/suspicious/noExplicitAny: test data
+        │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    129 │ 		} as any)
+    130 │ 		vi.mocked(applyToolConfigs).mockResolvedValue({ successes: ["Cursor"], failures: [] })
+  
+
+src/commands/setup-tools.test.ts:145:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    143 │ 		vi.mocked(updateModelsConfig).mockResolvedValue({
+    144 │ 			models: [{ id: "kimi-k2.5" }],
+  > 145 │ 			// biome-ignore lint/suspicious/noExplicitAny: test data
+        │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    146 │ 		} as any)
+    147 │ 		vi.mocked(applyToolConfigs).mockResolvedValue({ successes: ["Cursor"], failures: [] })
+  
+
+src/commands/setup-tools.test.ts:168:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    166 │ 		vi.mocked(updateModelsConfig).mockResolvedValue({
+    167 │ 			models: [{ id: "kimi-k2.5" }],
+  > 168 │ 			// biome-ignore lint/suspicious/noExplicitAny: test data
+        │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    169 │ 		} as any)
+    170 │ 		vi.mocked(applyToolConfigs).mockResolvedValue({ successes: ["Cursor"], failures: [] })
+  
+
+src/commands/setup-tools.test.ts:205:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    203 │ 		vi.mocked(updateModelsConfig).mockResolvedValue({
+    204 │ 			models: [{ id: "kimi-k2.5" }],
+  > 205 │ 			// biome-ignore lint/suspicious/noExplicitAny: test data
+        │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    206 │ 		} as any)
+    207 │ 		vi.mocked(applyToolConfigs).mockResolvedValue({
+  
+
+src/extensions/agents/manager/agent-manager.ts:235:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    233 │ 	private drainQueue() {
+    234 │ 		while (this.queue.length > 0 && this.runningBackground < this.maxConcurrent) {
+  > 235 │ 			// biome-ignore lint/style/noNonNullAssertion: shift() is guaranteed non-undefined inside while(length > 0) loop
+        │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    236 │ 			const next = this.queue.shift()!
+    237 │ 			const record = this.agents.get(next.id)
+  
+
+src/extensions/agents/manager/agent-manager.ts:265:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    263 │ 	): Promise<AgentRecord> {
+    264 │ 		const id = this.spawn(pi, ctx, type, prompt, { ...options, isBackground: false })
+  > 265 │ 		// biome-ignore lint/style/noNonNullAssertion: spawn() just inserted this id into the agents map
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    266 │ 		const record = this.agents.get(id)!
+    267 │ 		await record.promise
+  
+
+src/extensions/agents/index.ts:782:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    781 │ 	function getModelLabelFromConfig(model: string): string {
+  > 782 │ 		// biome-ignore lint/style/noNonNullAssertion: split() of a string containing "/" always yields >=2 elements
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    783 │ 		const name = model.includes("/") ? model.split("/").pop()! : model
+    784 │ 		return name.replace(/-\d{8}$/, "")
+  
+
+src/extensions/curator/review.ts:348:1 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    346 │ with no corrections and no reusable technique emerged, say "Nothing to save." and stop. Otherwise, act.`
+    347 │ 
+  > 348 │ // biome-ignore lint/suspicious/noExplicitAny: messages type not exported from pi-coding-agent
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    349 │ function serializeTranscript(messages: any[]): string {
+    350 │ 	const llm = convertToLlm(messages)
+  
+
+src/extensions/curator/review.ts:393:2 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    391 │ 	model: string
+    392 │ 	skillsDir: string
+  > 393 │ 	// biome-ignore lint/suspicious/noExplicitAny: messages type not exported from pi-coding-agent
+        │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    394 │ 	messages: any[]
+    395 │ }
+  
+
+src/extensions/disabled/tool-result-pruning.test.ts:214:5 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    212 │ 			toolName: "bash",
+    213 │ 			content: [
+  > 214 │ 				// biome-ignore lint/suspicious/noExplicitAny: image block not in TextContent union
+        │ 				^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    215 │ 				{ type: "image", source: { type: "base64", mediaType: "image/png", data: "abc" } } as any,
+    216 │ 				{ type: "text", text: bigText },
+  
+
+src/extensions/ferment/gate-validation.ts:54:1 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    52 │ }
+    53 │ 
+  > 54 │ // biome-ignore lint/suspicious/noExplicitAny: prepareArguments runs on raw LLM JSON; return must satisfy Static<TParams> for any gate schema.
+       │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    55 │ export function assertGateFieldsPresent(args: unknown): any {
+    56 │ 	if (args == null || typeof args !== "object") return args
+  
+
+src/extensions/ferment/scoping-flow.integration.test.ts:27:2 suppressions/unused ━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    25 │ interface RegisteredTool {
+    26 │ 	name: string
+  > 27 │ 	// biome-ignore lint/suspicious/noExplicitAny: mock harness
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    28 │ 	execute: (toolCallId: string, params: any, signal?: AbortSignal, onUpdate?: any, ctx?: any) => Promise<any>
+    29 │ }
+  
+
+src/extensions/ferment/scoping.test.ts:216:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    214 │ 		const pi = makePi()
+    215 │ 		const ctx = makeCtx([])
+  > 216 │ 		// biome-ignore lint/style/noNonNullAssertion: makeCtx always populates ctx.ui.input
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    217 │ 		const inputSpy = vi.mocked(ctx.ui.input!)
+    218 │ 
+  
+
+src/extensions/ferment/tools/steps.ts:116:2 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    114 │ 	let stdout = ""
+    115 │ 	let stderr = ""
+  > 116 │ 	// biome-ignore lint/suspicious/noExplicitAny: accessing controller tools
+        │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    117 │ 	const controller = (ctx as any)?.controller
+    118 │ 	if (controller?.tools?.bash?.execute) {
+  
+
+src/extensions/ferment/tools/steps.ts:123:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    121 │ 			: AbortSignal.timeout(VERIFY_TIMEOUT_MS)
+    122 │ 		try {
+  > 123 │ 			// biome-ignore lint/suspicious/noExplicitAny: tool execution
+        │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    124 │ 			const execResult = await (controller.tools.bash.execute as any)("", { command }, verifySignal, onUpdate, ctx)
+    125 │ 			stdout = execResult.stdout ?? ""
+  
+
+src/extensions/ferment/tools/steps.ts:617:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    615 │ 			let stderr = ""
+    616 │ 
+  > 617 │ 			// biome-ignore lint/suspicious/noExplicitAny: accessing controller tools
+        │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    618 │ 			const controller = (ctx as any).controller
+    619 │ 			if (controller?.tools?.bash?.execute) {
+  
+
+src/extensions/ferment/tools/steps.ts:624:6 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    622 │ 					: AbortSignal.timeout(VERIFY_TIMEOUT_MS)
+    623 │ 				try {
+  > 624 │ 					// biome-ignore lint/suspicious/noExplicitAny: tool execution
+        │ 					^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    625 │ 					const execResult = await (controller.tools.bash.execute as any)(
+    626 │ 						"",
+  
+
+src/extensions/help.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+    152 │ → → → → → → invalidate()·{·},
+        │                           -  
+
+src/extensions/ferment/tools.integration.test.ts:62:2 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    60 │ 	name: string
+    61 │ 	description?: string
+  > 62 │ 	// biome-ignore lint/suspicious/noExplicitAny: mock harness
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    63 │ 	execute: (toolCallId: string, params: any, signal?: AbortSignal, onUpdate?: any, ctx?: any) => Promise<any>
+    64 │ }
+  
+
+src/extensions/lsp/servers.ts:25:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    23 │ 	// Try Bun first (dev mode), fall back to Node child_process (production build)
+    24 │ 	try {
+  > 25 │ 		// biome-ignore lint/suspicious/noExplicitAny: Bun not typed without @types/bun
+       │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    26 │ 		const Bun = (globalThis as any).Bun
+    27 │ 		if (Bun?.spawnSync) {
+  
+
+src/extensions/lsp/client.ts:185:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    183 │ 	const clientPromise = (async () => {
+    184 │ 		// Bun global available at runtime but not typed — use globalThis cast
+  > 185 │ 		// biome-ignore lint/suspicious/noExplicitAny: Bun not typed without @types/bun
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    186 │ 		const Bun = (globalThis as any).Bun
+    187 │ 		const proc = Bun.spawn([config.command, ...(config.args ?? [])], {
+  
+
+src/extensions/lsp/client.ts:225:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    223 │ 		clients.set(key, client)
+    224 │ 
+  > 225 │ 		// biome-ignore lint/suspicious/noExplicitAny: Bun not typed without @types/bun
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    226 │ 		;(proc as any).exited.then(() => {
+    227 │ 			clients.delete(key)
+  
+
+src/extensions/lsp/client.ts:230:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    228 │ 			clientLocks.delete(key)
+    229 │ 			client.resolveProjectLoaded()
+  > 230 │ 			// biome-ignore lint/suspicious/noExplicitAny: Bun not typed without @types/bun
+        │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    231 │ 			const err = new Error(`LSP server exited (code ${(proc as any).exitCode})`)
+    232 │ 			for (const pending of client.pendingRequests.values()) pending.reject(err)
+  
+
+src/extensions/lsp/client.ts:348:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    346 │ 		let content: string
+    347 │ 		try {
+  > 348 │ 			// biome-ignore lint/suspicious/noExplicitAny: Bun not typed without @types/bun
+        │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    349 │ 			const Bun = (globalThis as any).Bun
+    350 │ 			content = await Bun.file(filePath).text()
+  
+
+src/extensions/lsp/client.ts:395:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    393 │ 		let content: string
+    394 │ 		try {
+  > 395 │ 			// biome-ignore lint/suspicious/noExplicitAny: Bun not typed without @types/bun
+        │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    396 │ 			const Bun = (globalThis as any).Bun
+    397 │ 			content = await Bun.file(filePath).text()
+  
+
+src/sandbox/cloud/types.ts:51:2 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    49 │ 	wsPath?: string
+    50 │ 	onTick?: (info: { elapsedMs: number; lastError?: string }) => void
+  > 51 │ 	// biome-ignore lint/suspicious/noExplicitAny: tests inject a fake WebSocket constructor
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    52 │ 	_WebSocket?: any
+    53 │ }
+  
+
+src/extensions/lsp.test.ts:179:2 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    177 │ 	const tool = pi.getAllTools().find((t) => t.name === name)
+    178 │ 	if (!tool) throw new Error(`Tool "${name}" not found`)
+  > 179 │ 	// biome-ignore lint/suspicious/noExplicitAny: test helper
+        │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    180 │ 	return (tool as any).execute("call-id", params, new AbortController().signal, () => {}, {})
+    181 │ }
+  
+
+src/extensions/permissions/prompts.test.ts:27:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    25 │ 				setWorkingVisible: vi.fn(),
+    26 │ 			},
+  > 27 │ 			// biome-ignore lint/suspicious/noExplicitAny: minimal stub for test
+       │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    28 │ 		} as any
+    29 │ 	}
+  
+
+src/extensions/report-bug.test.ts:65:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    63 │ 		ui: { notify: vi.fn(), progress: vi.fn(), custom: vi.fn(), confirm: vi.fn() },
+    64 │ 		sessionManager: { getSessionFile: vi.fn(() => "/tmp/test-session.jsonl") },
+  > 65 │ 		// biome-ignore lint/suspicious/noExplicitAny: minimal mock
+       │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    66 │ 	} as any
+    67 │ }
+  
+
+src/extensions/report-bug.test.ts:74:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    72 │ 		ui: { notify: vi.fn(), progress: vi.fn(), custom: vi.fn(), confirm: vi.fn() },
+    73 │ 		sessionManager: { getSessionFile: vi.fn(() => "/tmp/test-session.jsonl") },
+  > 74 │ 		// biome-ignore lint/suspicious/noExplicitAny: minimal mock
+       │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    75 │ 	} as any
+    76 │ }
+  
+
+src/extensions/superpowers/installer.ts:40:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    38 │ 			stream.on("finish", resolve)
+    39 │ 			stream.on("error", reject)
+  > 40 │ 			// biome-ignore lint/style/noNonNullAssertion: fetch guarantees body when ok
+       │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    41 │ 			const reader = response.body!.getReader()
+    42 │ 			function pump(): void {
+  
+
+src/extensions/telemetry/pre-session.test.ts:58:2 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    56 │ 	const calls = vi.mocked(sendLog).mock.calls
+    57 │ 	expect(calls.length).toBeGreaterThan(0)
+  > 58 │ 	// biome-ignore lint/style/noNonNullAssertion: test helper — length checked above
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    59 │ 	const lastCall = calls[calls.length - 1]!
+    60 │ 	return {
+  
+
+src/extensions/telemetry/index.test.ts:87:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    85 │ 		fetchMock = vi.fn().mockResolvedValue({ ok: true, text: async () => "" })
+    86 │ 		originalFetch = globalThis.fetch
+  > 87 │ 		// biome-ignore lint/suspicious/noExplicitAny: test mock
+       │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    88 │ 		globalThis.fetch = fetchMock as any
+    89 │ 	})
+  
+
+src/extensions/telemetry/index.test.ts:287:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    285 │ 		fetchMock = vi.fn().mockResolvedValue({ ok: true, text: async () => "" })
+    286 │ 		originalFetch = globalThis.fetch
+  > 287 │ 		// biome-ignore lint/suspicious/noExplicitAny: test mock
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    288 │ 		globalThis.fetch = fetchMock as any
+    289 │ 	})
+  
+
+src/extensions/telemetry/index.test.ts:744:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    742 │ 		fetchMock = vi.fn().mockResolvedValue({ ok: true, text: async () => "" })
+    743 │ 		originalFetch = globalThis.fetch
+  > 744 │ 		// biome-ignore lint/suspicious/noExplicitAny: test mock
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    745 │ 		globalThis.fetch = fetchMock as any
+    746 │ 	})
+  
+
+src/extensions/telemetry/index.test.ts:858:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    856 │ 		fetchMock = vi.fn().mockResolvedValue({ ok: true, text: async () => "" })
+    857 │ 		originalFetch = globalThis.fetch
+  > 858 │ 		// biome-ignore lint/suspicious/noExplicitAny: test mock
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    859 │ 		globalThis.fetch = fetchMock as any
+    860 │ 	})
+  
+
+src/extensions/telemetry/index.test.ts:988:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    986 │ 		fetchMock = vi.fn().mockResolvedValue({ ok: true, text: async () => "" })
+    987 │ 		originalFetch = globalThis.fetch
+  > 988 │ 		// biome-ignore lint/suspicious/noExplicitAny: test mock
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    989 │ 		globalThis.fetch = fetchMock as any
+    990 │ 	})
+  
+
+src/paste-to-editor-patch.ts:11:1 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+     9 │ import { InteractiveMode } from "@earendil-works/pi-coding-agent"
+    10 │ 
+  > 11 │ // biome-ignore lint/suspicious/noExplicitAny: private upstream prototype mutation
+       │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    12 │ const imProto = InteractiveMode.prototype as any
+    13 │ 
+  
+
+src/paste-to-editor-patch.test.ts:16:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    14 │ 		}
+    15 │ 
+  > 16 │ 		// biome-ignore lint/suspicious/noExplicitAny: patched upstream method not in public types
+       │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    17 │ 		const ctx = (InteractiveMode.prototype as any).createExtensionUIContext.call(fakeIm)
+    18 │ 		ctx.pasteToEditor("hello")
+  
+
+src/extensions/tool-grouping.ts:92:2 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    91 │ export function patchAddChild(): void {
+  > 92 │ 	// biome-ignore lint/suspicious/noExplicitAny: prototype patching requires runtime property access
+       │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    93 │ 	const proto = Container.prototype as any
+    94 │ 	if (proto[ADDCHILD_PATCH_FLAG]) return
+  
+
+src/extensions/tool-grouping.ts:117:2 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    115 │ function isFailedTool(v: unknown): boolean {
+    116 │ 	if (!isToolLike(v)) return false
+  > 117 │ 	// biome-ignore lint/suspicious/noExplicitAny: runtime duck-typing on unknown object
+        │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    118 │ 	const c = v as any
+    119 │ 	return c.result?.isError === true
+  
+
+src/extensions/tool-grouping.ts:221:1 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    219 │ const GROUP_RENDER_PATCH_FLAG = Symbol.for("pi-tool-grouping:patched-render")
+    220 │ 
+  > 221 │ // biome-ignore lint/suspicious/noExplicitAny: theme comes from untyped external package
+        │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    222 │ export function buildGroupView(run: object[], theme: any): ToolBlockView {
+    223 │ 	const view = new ToolBlockView()
+  
+
+src/extensions/tool-grouping.ts:224:2 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    222 │ export function buildGroupView(run: object[], theme: any): ToolBlockView {
+    223 │ 	const view = new ToolBlockView()
+  > 224 │ 	// biome-ignore lint/suspicious/noExplicitAny: runtime duck-typing on unknown object
+        │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    225 │ 	const last = run[run.length - 1] as any
+    226 │ 	const isInProgress = last?.isPartial === true
+  
+
+src/extensions/tool-grouping.ts:263:2 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    262 │ export function patchToolGroupRendering(): void {
+  > 263 │ 	// biome-ignore lint/suspicious/noExplicitAny: prototype patching requires runtime property access
+        │ 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    264 │ 	const proto = ToolExecutionComponent.prototype as any
+    265 │ 	if (proto[GROUP_RENDER_PATCH_FLAG]) return
+  
+
+src/extensions/tool-grouping.ts:282:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    280 │ 		// ctrl+o wires to component.setExpanded() on ALL tools globally.
+    281 │ 		// Use the last tool's .expanded field as the group's expand state.
+  > 282 │ 		// biome-ignore lint/suspicious/noExplicitAny: runtime duck-typing on ToolExecutionComponent instance
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    283 │ 		const lastTool = run[run.length - 1] as any
+    284 │ 		if (lastTool.expanded === true) return originalRender.call(this, width)
+  
+
+src/extensions/tool-grouping.ts:288:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    286 │ 		if (lastTool !== this) return []
+    287 │ 
+  > 288 │ 		// biome-ignore lint/suspicious/noExplicitAny: accessing private fields of untyped prototype
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    289 │ 		const theme = (this as any).ui?.theme
+    290 │ 		const groupView = buildGroupView(run, theme)
+  
+
+src/extensions/tool-grouping.ts:294:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    292 │ 		// Inject groupView into contentBox so the full render pipeline applies the
+    293 │ 		// ▍ stroke (Box) and spacing/border wrapper (patchedContainerRender).
+  > 294 │ 		// biome-ignore lint/suspicious/noExplicitAny: accessing private fields of untyped prototype
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    295 │ 		const contentBox = (this as any).contentBox
+    296 │ 		// biome-ignore lint/suspicious/noExplicitAny: accessing private fields of untyped prototype
+  
+
+src/extensions/tool-grouping.ts:296:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    294 │ 		// biome-ignore lint/suspicious/noExplicitAny: accessing private fields of untyped prototype
+    295 │ 		const contentBox = (this as any).contentBox
+  > 296 │ 		// biome-ignore lint/suspicious/noExplicitAny: accessing private fields of untyped prototype
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    297 │ 		const usingSelf = typeof (this as any).getRenderShell === "function" && (this as any).getRenderShell() === "self"
+    298 │ 
+  
+
+src/extensions/tool-grouping.ts:318:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    317 │ 		// Bypass render caches so the patched Container render actually runs.
+  > 318 │ 		// biome-ignore lint/suspicious/noExplicitAny: Symbol-keyed cache busting on untyped prototype
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    319 │ 		delete (this as any)[TOOL_RENDER_CACHE_KEY]
+    320 │ 		contentBox.invalidate()
+  
+
+src/extensions/tool-grouping.ts:330:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    328 │ 		contentBox.paddingY = savedPaddingY
+    329 │ 		contentBox.invalidate()
+  > 330 │ 		// biome-ignore lint/suspicious/noExplicitAny: Symbol-keyed cache busting on untyped prototype
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    331 │ 		delete (this as any)[TOOL_RENDER_CACHE_KEY]
+    332 │ 
+  
+
+src/extensions/tool-rendering.test.ts:92:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    90 │ 			{},
+    91 │ 			undefined,
+  > 92 │ 			// biome-ignore lint/suspicious/noExplicitAny: mock property access
+       │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    93 │ 			{ requestRender: () => {} } as any,
+    94 │ 			"/tmp",
+  
+
+src/extensions/tool-rendering.test.ts:100:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+     98 │ 	it("records _executionStartedAt when markExecutionStarted is called", () => {
+     99 │ 		const component = createMockComponent()
+  > 100 │ 		// biome-ignore lint/suspicious/noExplicitAny: mock property access
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    101 │ 		expect((component as any).rendererState._executionStartedAt).toBeUndefined()
+    102 │ 		component.markExecutionStarted()
+  
+
+src/extensions/tool-rendering.test.ts:103:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    101 │ 		expect((component as any).rendererState._executionStartedAt).toBeUndefined()
+    102 │ 		component.markExecutionStarted()
+  > 103 │ 		// biome-ignore lint/suspicious/noExplicitAny: mock property access
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    104 │ 		expect(typeof (component as any).rendererState._executionStartedAt).toBe("number")
+    105 │ 	})
+  
+
+src/extensions/tool-rendering.test.ts:110:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    108 │ 		const component = createMockComponent()
+    109 │ 		component.markExecutionStarted()
+  > 110 │ 		// biome-ignore lint/suspicious/noExplicitAny: mock property access
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    111 │ 		expect((component as any).rendererState._executionEndedAt).toBeUndefined()
+    112 │ 		component.updateResult({ content: [], isError: false }, false)
+  
+
+src/extensions/tool-rendering.test.ts:113:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    111 │ 		expect((component as any).rendererState._executionEndedAt).toBeUndefined()
+    112 │ 		component.updateResult({ content: [], isError: false }, false)
+  > 113 │ 		// biome-ignore lint/suspicious/noExplicitAny: mock property access
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    114 │ 		expect(typeof (component as any).rendererState._executionEndedAt).toBe("number")
+    115 │ 	})
+  
+
+src/extensions/tool-rendering.test.ts:120:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    118 │ 		const component = createMockComponent()
+    119 │ 		component.markExecutionStarted()
+  > 120 │ 		// biome-ignore lint/suspicious/noExplicitAny: mock property access
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    121 │ 		const first = (component as any).rendererState._executionStartedAt
+    122 │ 		component.markExecutionStarted()
+  
+
+src/extensions/tool-rendering.test.ts:123:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    121 │ 		const first = (component as any).rendererState._executionStartedAt
+    122 │ 		component.markExecutionStarted()
+  > 123 │ 		// biome-ignore lint/suspicious/noExplicitAny: mock property access
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    124 │ 		expect((component as any).rendererState._executionStartedAt).toBe(first)
+    125 │ 	})
+  
+
+src/extensions/tool-rendering.test.ts:130:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    128 │ 		const component = createMockComponent()
+    129 │ 		component.markExecutionStarted()
+  > 130 │ 		// biome-ignore lint/suspicious/noExplicitAny: mock property access
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    131 │ 		expect((component as any).rendererState._executionEndedAt).toBeUndefined()
+    132 │ 		component.updateResult({ content: [], isError: false })
+  
+
+src/extensions/tool-rendering.test.ts:133:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    131 │ 		expect((component as any).rendererState._executionEndedAt).toBeUndefined()
+    132 │ 		component.updateResult({ content: [], isError: false })
+  > 133 │ 		// biome-ignore lint/suspicious/noExplicitAny: mock property access
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    134 │ 		expect(typeof (component as any).rendererState._executionEndedAt).toBe("number")
+    135 │ 	})
+  
+
+src/extensions/tool-rendering.test.ts:141:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    139 │ 		component.markExecutionStarted()
+    140 │ 		component.updateResult({ content: [], isError: false }, true)
+  > 141 │ 		// biome-ignore lint/suspicious/noExplicitAny: mock property access
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    142 │ 		expect((component as any).rendererState._executionEndedAt).toBeUndefined()
+    143 │ 	})
+  
+
+src/extensions/tool-rendering.test.ts:162:4 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    160 │ 			{},
+    161 │ 			undefined,
+  > 162 │ 			// biome-ignore lint/suspicious/noExplicitAny: minimal ExtensionAPI test double
+        │ 			^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    163 │ 			{ requestRender: () => {} } as any,
+    164 │ 			"/tmp",
+  
+
+src/extensions/tool-grouping.test.ts:354:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    352 │ 		vi.setSystemTime(now)
+    353 │ 		const run = [mockToolFull("read", { path: "a.ts" }), mockToolFull("read", { path: "b.ts" }, { isPartial: true })]
+  > 354 │ 		// biome-ignore lint/suspicious/noExplicitAny: mock property access
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    355 │ 		;(run[1] as any).rendererState = { _executionStartedAt: now.getTime() - 5000 }
+    356 │ 		const view = buildGroupView(run, plainTheme)
+  
+
+src/extensions/tool-grouping.test.ts:368:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    366 │ 		vi.setSystemTime(now)
+    367 │ 		const run = [mockToolFull("read", { path: "a.ts" }, { isPartial: true })]
+  > 368 │ 		// biome-ignore lint/suspicious/noExplicitAny: mock property access
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    369 │ 		;(run[0] as any).rendererState = { _executionStartedAt: now.getTime() - 500 }
+    370 │ 		const view = buildGroupView(run, plainTheme)
+  
+
+src/extensions/tool-grouping.test.ts:379:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    377 │ 	it("appends timer for completed groups", () => {
+    378 │ 		const run = [mockToolFull("read", { path: "a.ts" }), mockToolFull("read", { path: "b.ts" })]
+  > 379 │ 		// biome-ignore lint/suspicious/noExplicitAny: mock property access
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    380 │ 		;(run[1] as any).rendererState = { _executionStartedAt: Date.now() - 5000, _executionEndedAt: Date.now() }
+    381 │ 		const view = buildGroupView(run, plainTheme)
+  
+
+src/modes/acp/server.test.ts:472:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    470 │ 		const writes: string[] = []
+    471 │ 		const origWrite = process.stderr.write.bind(process.stderr)
+  > 472 │ 		// biome-ignore lint/suspicious/noExplicitAny: test-only stderr capture
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    473 │ 		;(process.stderr.write as any) = (chunk: string | Uint8Array) => {
+    474 │ 			writes.push(typeof chunk === "string" ? chunk : Buffer.from(chunk).toString("utf8"))
+  
+
+src/modes/acp/server.test.ts:480:5 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    478 │ 			const r1 = await agent.prompt({
+    479 │ 				sessionId,
+  > 480 │ 				// biome-ignore lint/suspicious/noExplicitAny: unsupported block on purpose
+        │ 				^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    481 │ 				prompt: [{ type: "audio" as any, data: "x" } as any],
+    482 │ 			})
+  
+
+src/modes/acp/server.test.ts:487:5 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    485 │ 			const r2 = await agent.prompt({
+    486 │ 				sessionId,
+  > 487 │ 				// biome-ignore lint/suspicious/noExplicitAny: unsupported block on purpose
+        │ 				^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    488 │ 				prompt: [{ type: "audio" as any, data: "y" } as any],
+    489 │ 			})
+  
+
+src/modes/acp/server.test.ts:494:5 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    492 │ 			const r3 = await agent.prompt({
+    493 │ 				sessionId,
+  > 494 │ 				// biome-ignore lint/suspicious/noExplicitAny: unsupported block on purpose
+        │ 				^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    495 │ 				prompt: [{ type: "embeddedContext" as any, data: "z" } as any],
+    496 │ 			})
+  
+
+src/modes/acp/server.test.ts:550:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    548 │ 		const writes: string[] = []
+    549 │ 		const origWrite = process.stderr.write.bind(process.stderr)
+  > 550 │ 		// biome-ignore lint/suspicious/noExplicitAny: test-only stderr capture
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    551 │ 		;(process.stderr.write as any) = (chunk: string | Uint8Array) => {
+    552 │ 			writes.push(typeof chunk === "string" ? chunk : Buffer.from(chunk).toString("utf8"))
+  
+
+src/modes/acp/server.test.ts:908:5 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    906 │ 			localAgent.newSession({
+    907 │ 				cwd: "/tmp",
+  > 908 │ 				// biome-ignore lint/suspicious/noExplicitAny: only the shape we care about
+        │ 				^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    909 │ 				mcpServers: [{ name: "x", command: "x", args: [] } as any],
+    910 │ 			}),
+  
+
+src/modes/acp/server.test.ts:1599:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    1597 │ 		})
+    1598 │ 		// Verify options array is present with all valid modes
+  > 1599 │ 		// biome-ignore lint/suspicious/noExplicitAny: union type requires assertion
+         │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    1600 │ 		const selectOption = res.configOptions[0] as any
+    1601 │ 		expect(selectOption.options).toHaveLength(4)
+  
+
+src/modes/acp/server.test.ts:2027:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    2025 │ 		const configUpdates = updates.filter((u) => u.update.sessionUpdate === "config_option_update")
+    2026 │ 		expect(configUpdates).toHaveLength(1)
+  > 2027 │ 		// biome-ignore lint/suspicious/noExplicitAny: union type requires assertion
+         │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    2028 │ 		const update = configUpdates[0].update as any
+    2029 │ 		expect(update.configOptions[0].currentValue).toBe("plan")
+  
+
+src/modes/acp/server.test.ts:2092:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    2090 │ 		const yoloConfigUpdates = updates.filter((u) => u.update.sessionUpdate === "config_option_update")
+    2091 │ 		expect(yoloConfigUpdates).toHaveLength(1)
+  > 2092 │ 		// biome-ignore lint/suspicious/noExplicitAny: union type requires assertion
+         │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    2093 │ 		const yoloUpdate = yoloConfigUpdates[0].update as any
+    2094 │ 		expect(yoloUpdate.configOptions[0].currentValue).toBe("yolo")
+  
+
+src/modes/acp/server.test.ts:2131:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    2129 │ 		const defaultConfigUpdates = updates.filter((u) => u.update.sessionUpdate === "config_option_update")
+    2130 │ 		expect(defaultConfigUpdates).toHaveLength(1)
+  > 2131 │ 		// biome-ignore lint/suspicious/noExplicitAny: union type requires assertion
+         │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    2132 │ 		const defaultUpdate = defaultConfigUpdates[0].update as any
+    2133 │ 		expect(defaultUpdate.configOptions[0].currentValue).toBe("default")
+  
+
+src/modes/acp/server.test.ts:2787:5 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    2785 │ 				sessionId: "s1",
+    2786 │ 				cwd: "/tmp",
+  > 2787 │ 				// biome-ignore lint/suspicious/noExplicitAny: only the shape we care about
+         │ 				^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    2788 │ 				mcpServers: [{ name: "x", command: "x", args: [] } as any],
+    2789 │ 			}),
+  
+
+src/ferment/event-store.test.ts:770:5 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    768 │ 					],
+    769 │ 				},
+  > 770 │ 				// biome-ignore lint/suspicious/noExplicitAny: synthetic legacy payload
+        │ 				^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    771 │ 			} as any as FermentEvent
+    772 │ 
+  
+
+src/ferment/store.test.ts:230:3 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    229 │ 	describe("step lifecycle", () => {
+  > 230 │ 		// biome-ignore lint/suspicious/noExplicitAny: test helper
+        │ 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    231 │ 		let f: any
+    232 │ 
+  
+
+src/ferment/state-machine.test.ts:294:5 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    292 │ 			applyCommand(
+    293 │ 				makeFerment(),
+  > 294 │ 				// biome-ignore lint/suspicious/noExplicitAny: testing invalid input
+        │ 				^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    295 │ 				{ type: "update_scope_field", field: "bogus" as any, value: "x" },
+    296 │ 				ctx,
+  
+
+src/ferment/state-machine.test.ts:1127:5 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+    1125 │ 			applyCommand(
+    1126 │ 				makeFerment(),
+  > 1127 │ 				// biome-ignore lint/suspicious/noExplicitAny: testing invalid input
+         │ 				^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    1128 │ 				{ type: "add_memory", category: "bogus" as any, content: "x" },
+    1129 │ 				ctx,
+  
+
+src/model-selector-patch.ts:10:1 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+  
+     8 │ // Patch InteractiveMode to disable upstream /login and /logout commands
+     9 │ // ---------------------------------------------------------------------------
+  > 10 │ // biome-ignore lint/suspicious/noExplicitAny: private upstream prototype mutation
+       │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    11 │ const imProto = InteractiveMode.prototype as any
+    12 │ imProto.showOAuthSelector = async function (this: any, mode: "login" | "logout") {
+  
+
+Checked 851 files in 2s. No fixes applied.
+Found 1 error.
+Found 87 warnings.
+check ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Some errors were emitted while running checks.
+  
+

@@ -88,6 +88,7 @@ import toolGroupingExtension from "./extensions/tool-grouping.js"
 import toolRenderingExtension from "./extensions/tool-rendering.js"
 import traceIdExtension from "./extensions/trace-id.js"
 import uiExtension from "./extensions/ui.js"
+import voiceToCodeExtension from "./extensions/voice-to-code/index.js"
 import webFetchExtension from "./extensions/web-fetch/index.js"
 import webSearchExtension from "./extensions/web-search/index.js"
 import { updateModelsConfig } from "./models.js"
@@ -480,6 +481,7 @@ try {
 			...enabledExtensionFactories([
 				{ id: "extensions.agents", factory: agentsExtension },
 			] satisfies ManagedExtensionFactory[]),
+			voiceToCodeExtension,
 			helpExtension,
 			themeSelectorExtension,
 			inputHistoryExtension,
