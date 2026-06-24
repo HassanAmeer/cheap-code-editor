@@ -1,0 +1,4 @@
+{
+	"binary": "~/.local/bin/cheap",
+	"models": ["kimi-k2.6", "minimax-m2.7"]
+}

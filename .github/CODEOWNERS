@@ -1,0 +1,16 @@
+# Global fallback — all PRs require at least one maintainer review
+* @getcheap/core
+
+# Ferment subsystem
+src/extensions/ferment/ @getcheap/core
+src/ferment/ @getcheap/core
+
+# Teleport subsystem
+src/modes/teleport/ @getcheap/core
+
+# CI and repo config
+.github/ @getcheap/core
+
+# Docs
+docs/ @getcheap/core
+*.md @getcheap/core
