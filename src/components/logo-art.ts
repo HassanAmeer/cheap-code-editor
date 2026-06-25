@@ -43,7 +43,7 @@ export function buildLogoLines(theme: Theme): string[] {
 	const L = theme.getFgAnsi("accent")
 
 	return [
-		`${L}         ⎮⎮                       /$$                                    ${RST_FG}`,
+		`${L}         ⎮⎮                      /$$                                    ${RST_FG}`,
 		`${L}       ██████                   | $$                                    ${RST_FG}`,
 		`${L}     ██  ⎮⎮  ██         /$$$$$$$| $$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$ ${RST_FG}`,
 		`${L}     ██  ⎮⎮            /$$_____/| $$__  $$ /$$__  $$ |____  $$ /$$__  $$${RST_FG}`,
