@@ -29,10 +29,10 @@ function makeKeybindings(): KeybindingsManager {
 }
 
 function makeTheme(): Theme {
-	// Stub: only `getFgAnsi` is touched by PromptEditor.render. Cast keeps the
 	// typechecker honest while letting us return plain ANSI escapes.
 	return {
 		getFgAnsi: (_color: string) => "",
+		getBgAnsi: (_color: string) => "",
 	} as unknown as Theme
 }
 

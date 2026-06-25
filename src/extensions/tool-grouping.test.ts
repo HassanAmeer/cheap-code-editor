@@ -180,7 +180,7 @@ function mockTool(id: string, opts: { isPartial?: boolean; isError?: boolean } =
 		isPartial: opts.isPartial ?? false,
 		result: opts.isError ? { isError: true } : undefined,
 		render: (_width: number) => [],
-		invalidate: () => {},
+		invalidate: () => { },
 	}
 }
 
@@ -220,7 +220,7 @@ describe("findToolGroup", () => {
 	it("non-tool, non-spacer breaks the run", () => {
 		const a = mockTool("a")
 		const b = mockTool("b")
-		const other = { render: () => [], invalidate: () => {} }
+		const other = { render: () => [], invalidate: () => { } }
 		const c = mockTool("c")
 		const children = [a, b, other, c]
 		expect(findToolGroup(a, children)).toEqual([a, b])
@@ -280,7 +280,7 @@ function mockToolFull(toolName: string, args: Record<string, unknown>, opts: { i
 		isPartial: opts.isPartial ?? false,
 		result: undefined,
 		render: (_width: number) => [],
-		invalidate: () => {},
+		invalidate: () => { },
 	}
 }
 
@@ -351,8 +351,8 @@ describe("buildGroupView", () => {
 		vi.useFakeTimers()
 		vi.setSystemTime(now)
 		const run = [mockToolFull("read", { path: "a.ts" }), mockToolFull("read", { path: "b.ts" }, { isPartial: true })]
-		// biome-ignore lint/suspicious/noExplicitAny: mock property access
-		;(run[1] as any).rendererState = { _executionStartedAt: now.getTime() - 5000 }
+			// biome-ignore lint/suspicious/noExplicitAny: mock property access
+			; (run[1] as any).rendererState = { _executionStartedAt: now.getTime() - 5000 }
 		const view = buildGroupView(run, plainTheme)
 		const lines = view.render(120)
 		const headerLine = lines[0]
@@ -365,8 +365,8 @@ describe("buildGroupView", () => {
 		vi.useFakeTimers()
 		vi.setSystemTime(now)
 		const run = [mockToolFull("read", { path: "a.ts" }, { isPartial: true })]
-		// biome-ignore lint/suspicious/noExplicitAny: mock property access
-		;(run[0] as any).rendererState = { _executionStartedAt: now.getTime() - 500 }
+			// biome-ignore lint/suspicious/noExplicitAny: mock property access
+			; (run[0] as any).rendererState = { _executionStartedAt: now.getTime() - 500 }
 		const view = buildGroupView(run, plainTheme)
 		const lines = view.render(120)
 		const headerLine = lines[0]
@@ -376,8 +376,8 @@ describe("buildGroupView", () => {
 
 	it("appends timer for completed groups", () => {
 		const run = [mockToolFull("read", { path: "a.ts" }), mockToolFull("read", { path: "b.ts" })]
-		// biome-ignore lint/suspicious/noExplicitAny: mock property access
-		;(run[1] as any).rendererState = { _executionStartedAt: Date.now() - 5000, _executionEndedAt: Date.now() }
+			// biome-ignore lint/suspicious/noExplicitAny: mock property access
+			; (run[1] as any).rendererState = { _executionStartedAt: Date.now() - 5000, _executionEndedAt: Date.now() }
 		const view = buildGroupView(run, plainTheme)
 		const lines = view.render(120)
 		const headerLine = lines[0]

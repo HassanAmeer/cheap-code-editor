@@ -315,7 +315,7 @@ export default function uiExtension(pi: ExtensionAPI) {
 
 		ctx.ui.setEditorComponent((tui, editorTheme, keybindings) => {
 			tui.setShowHardwareCursor(true)
-			const editor = new PromptEditor(tui, editorTheme, keybindings, ctx.ui.theme)
+			const editor = new PromptEditor(tui, editorTheme, keybindings, ctx.ui.theme, () => stopWorkingAnimation !== undefined)
 			editor.setExpandHandler(() => {
 				piToolsExpanded = !piToolsExpanded
 				ctx.ui.setToolsExpanded(piToolsExpanded)

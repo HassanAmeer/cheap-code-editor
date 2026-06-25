@@ -8,7 +8,7 @@ export class TipRow {
 	constructor(
 		private readonly getTip: () => TipCandidate | undefined,
 		private readonly theme: Theme,
-	) {}
+	) { }
 
 	render(width: number): string[] {
 		const tip = this.getTip()
@@ -16,7 +16,7 @@ export class TipRow {
 		return renderTipRow(tip, this.theme, width)
 	}
 
-	invalidate(): void {}
+	invalidate(): void { }
 }
 
 export function renderTipRow(tip: TipCandidate, theme: Theme, width: number): string[] {
@@ -31,11 +31,11 @@ export function renderTipText(message: string, theme: Theme, width: number): str
 	const content = formatTipContent(message, theme)
 	const truncated = truncateToWidth(content, contentWidth, "...")
 
-	return [truncated]
+	return [truncated, theme.fg("muted", "⎜")]
 }
 
 function formatTipContent(message: string, theme: Theme): string {
-	return `${theme.fg("muted", "Tip:")} ${formatTipMessage(message, theme)}`
+	return `${theme.fg("muted", "⎡ ⓘ Tip:")} ${formatTipMessage(message, theme)}`
 }
 
 export function formatTipMessage(message: string, theme: Theme): string {

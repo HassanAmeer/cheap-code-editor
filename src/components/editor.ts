@@ -29,10 +29,13 @@ export class PromptEditor extends CustomEditor {
 	private _pendingImageIndicator: string | null = null
 	private _sessionIndicator: string | null = null
 
-	constructor(tui: TUI, editorTheme: EditorTheme, keybindings: KeybindingsManager, appTheme: Theme) {
+	private readonly isWorking: () => boolean
+
+	constructor(tui: TUI, editorTheme: EditorTheme, keybindings: KeybindingsManager, appTheme: Theme, isWorking: () => boolean = () => false) {
 		super(tui, editorTheme, keybindings)
 		this.appTheme = appTheme
 		this.kb = keybindings
+		this.isWorking = isWorking
 	}
 
 	setExpandHandler(handler: () => void) {
@@ -125,13 +128,16 @@ export class PromptEditor extends CustomEditor {
 		const chevronColor = this.appTheme.getFgAnsi("accent")
 		const textColor = this.appTheme.getFgAnsi("text")
 		const muted = this.appTheme.getFgAnsi("muted")
+		// Using customMessageBg for the text area background. In terminals, actual opacity is not supported,
+		// so this theme color represents a faint overlay (approx 15% visual contrast).
+		const bg = this.appTheme.getBgAnsi("customMessageBg") || ""
+		const RST_BG = "\x1b[49m"
 
 		const innerWidth = width
+		// Chevron width is 2 ("▌ ")
 		const contentWidth = innerWidth - CHEVRON_WIDTH
 
-		// Editor body always renders at the full content width — the indicator
-		// lives in its own row (renderIndicatorRow below), so the user's text
-		// is never squeezed to make room for a right-aligned status string.
+		// Editor body always renders at the full content width
 		const lines = super.render(contentWidth)
 
 		// Find bottom border: scan backwards for a line starting with ─
@@ -144,52 +150,113 @@ export class PromptEditor extends CustomEditor {
 			}
 		}
 
-		const topBorder = rebuildBorder(lines[0], innerWidth, border)
-		const bottomBorder = rebuildBorder(lines[bottomIdx], innerWidth, border)
-		const result: string[] = [topBorder]
+		const result: string[] = []
+		const rowsToRender: string[] = []
 
-		// Indicator row sits between the top border and the first content row,
-		// rendered at the full inner width (right-aligned, muted). When no
-		// indicator is set, this row is omitted entirely so the editor's row
-		// count is unchanged from the no-indicator case.
-		const indicatorRow = this.renderIndicatorRow(innerWidth)
+		// Top scroll indicator from original top border
+		const topRaw = lines[0].replace(ANSI_RE, "")
+		const topMatch = topRaw.match(SCROLL_INDICATOR_RE)
+		if (topMatch) {
+			const indicator = topMatch[1].trim()
+			rowsToRender.push(`${muted}${indicator}${RST_FG}`)
+		}
+
+		// Indicator row sits between the top scroll indicator and the first content row
+		const indicatorRow = this.renderIndicatorRow(contentWidth)
 		if (indicatorRow !== null) {
-			result.push(indicatorRow)
+			rowsToRender.push(indicatorRow)
 		}
 
 		if (this.getText().length === 0) {
 			const cursorMarker = "\x1b_pi:c\x07"
 			// Use terminal's native cursor — no custom styling
 			const cursor = `${cursorMarker} `
-			// The indicator no longer competes for placeholder space — it lives
-			// on its own row above this one.
-			const cursorCellWidth = 1 // width of the space the terminal-native cursor occupies
-			const leadWidth = CHEVRON_WIDTH + cursorCellWidth
-			const placeholderBudget = innerWidth - leadWidth
+			const cursorCellWidth = 1
+			const leadWidth = cursorCellWidth
+			const placeholderBudget = contentWidth - leadWidth
 			const placeholderText = placeholderBudget >= visibleWidth(PLACEHOLDER_TEXT) ? PLACEHOLDER_TEXT : ""
-			const placeholderRendered = placeholderText.length > 0 ? `${muted}${placeholderText}${RST_FG}` : ""
-			const usedWidth = leadWidth + visibleWidth(placeholderText)
-			const middlePad = " ".repeat(Math.max(0, innerWidth - usedWidth))
-			result.push(`${chevronColor}❯${RST_FG} ${cursor}${placeholderRendered}${middlePad}`)
+			// Use \x1b[90m\x1b[1m (bright black/grey + bold) for the placeholder to ensure it's visible and thick
+			const placeholderRendered = placeholderText.length > 0 ? `\x1b[90m\x1b[1m${placeholderText}\x1b[22m${RST_FG}` : ""
+
+			rowsToRender.push(`${cursor}${placeholderRendered}`)
+			// Ensure min 3 lines
+			rowsToRender.push("")
+			rowsToRender.push("")
 		} else {
 			const contentLines = lines.slice(1, bottomIdx)
 			let cursorIdx = contentLines.findIndex((l) => l.includes("\x1b_pi:c"))
 			if (cursorIdx === -1) cursorIdx = 0
+
+			// Pad to minimum 3 lines
+			while (contentLines.length < 3) {
+				contentLines.push("")
+			}
+
 			for (let i = 0; i < contentLines.length; i++) {
-				const line = contentLines[i]
-				// Strip inverse-video cursor styling — use terminal's native cursor
-				const styled = i === cursorIdx ? line.replace("\x1b[7m", "").replaceAll("\x1b[0m", `\x1b[0m${textColor}`) : line
-				const prefix = i === cursorIdx ? `${chevronColor}❯${RST_FG} ` : "  "
-				const styledWidth = visibleWidth(styled)
-				const rightPad = " ".repeat(Math.max(0, contentWidth - styledWidth))
-				result.push(`${prefix}${textColor}${styled}${rightPad}${RST_FG}`)
+				let line = contentLines[i]
+
+				// Apply text color and strip inverse-video cursor styling for the active line
+				if (i === cursorIdx) {
+					line = line.replace("\x1b[7m", "")
+				}
+
+				// Always restore textColor after any reset in the line so text remains visible
+				const styled = line.replaceAll("\x1b[0m", `\x1b[0m${textColor}`)
+				rowsToRender.push(`${textColor}${styled}${RST_FG}`)
 			}
 		}
 
-		result.push(bottomBorder)
+		// Bottom scroll indicator from original bottom border
+		const bottomRaw = lines[bottomIdx].replace(ANSI_RE, "")
+		const bottomMatch = bottomRaw.match(SCROLL_INDICATOR_RE)
+		if (bottomMatch) {
+			const indicator = bottomMatch[1].trim()
+			rowsToRender.push(`${muted}${indicator}${RST_FG}`)
+		}
 
+		const totalRows = rowsToRender.length
+		const isGenerating = this.isWorking()
+
+		// Helper to wrap content with left border, background, and right padding
+		const renderRowWithBg = (content: string, w: number, rowIndex: number): string => {
+			let prefixStr = ""
+			if (isGenerating && totalRows > 0) {
+				const waveSpeed = 150
+				const litIdx = Math.floor(Date.now() / waveSpeed) % totalRows
+				if (rowIndex === litIdx) {
+					prefixStr = `\x1b[1m${chevronColor}▌${RST_FG}\x1b[22m `
+				} else if (rowIndex === (litIdx - 1 + totalRows) % totalRows) {
+					prefixStr = `\x1b[2m${chevronColor}▌\x1b[22m${RST_FG} `
+				} else {
+					prefixStr = `${muted}▌${RST_FG} `
+				}
+			} else {
+				prefixStr = `${muted}▌${RST_FG} `
+			}
+
+			const vW = visibleWidth(content)
+			const rightPad = " ".repeat(Math.max(0, w - vW))
+			// If content contains ANSI resets (\x1b[0m), they reset both foreground and background.
+			// We inject the background color after every reset to maintain the text area background,
+			// and also right pad with the background color intact.
+			const safeContent = bg ? content.replaceAll("\x1b[0m", `\x1b[0m${bg}`) : content
+			return `${prefixStr}${bg}${safeContent}${rightPad}${RST_BG}`
+		}
+
+		for (let i = 0; i < totalRows; i++) {
+			result.push(renderRowWithBg(rowsToRender[i], contentWidth, i))
+		}
+
+		// Add a faint bottom border line below the input field
+		// Using 256-color palette \x1b[38;5;Nm
+		// 235 is #262626 which is extremely close to #282828ff.
+		const borderFaintColor = "\x1b[38;5;235m"
+		// Using a thin line "─" for a 1px / 0.5px look
+		result.push(`${borderFaintColor}${"⏥".repeat(innerWidth)}${RST_FG}`)
+
+		// Suggestions and metadata (indented to match content width)
 		for (let i = bottomIdx + 1; i < lines.length; i++) {
-			result.push(lines[i])
+			result.push(`  ${lines[i]}`)
 		}
 
 		return result.map((line) => truncateToWidth(line, width))

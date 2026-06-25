@@ -130,7 +130,7 @@ function readSettings(): SettingsFile {
 const SPINNER_BUST_KEY = Symbol.for("pi-claude-style-tools:spinner-settings-bust")
 function bustSpinnerSettingsCache(): void {
 	const current = ((globalThis as any)[SPINNER_BUST_KEY] as number | undefined) ?? 0
-	;(globalThis as any)[SPINNER_BUST_KEY] = current + 1
+		; (globalThis as any)[SPINNER_BUST_KEY] = current + 1
 }
 
 function writeSettingsKey(key: string, value: unknown): void {
@@ -255,7 +255,7 @@ function patchGlobalToolBorders(): void {
 		if (!Array.isArray(rendered) || rendered.length === 0) return rendered
 		if (!isToolExecutionLike(this)) return rendered
 		if (toolBackgroundMode === "default") {
-			;(this as any)[TOOL_RENDER_CACHE] = { width, mode: toolBackgroundMode, lines: rendered }
+			; (this as any)[TOOL_RENDER_CACHE] = { width, mode: toolBackgroundMode, lines: rendered }
 			return rendered
 		}
 
@@ -267,7 +267,7 @@ function patchGlobalToolBorders(): void {
 
 		const { textLines, imageLines } = splitRenderedImageBlock(rendered.slice(start, end + 1))
 		if (imageLines.length > 0) {
-			;(this as any)[TOOL_RENDER_CACHE] = { width, mode: toolBackgroundMode, lines: rendered }
+			; (this as any)[TOOL_RENDER_CACHE] = { width, mode: toolBackgroundMode, lines: rendered }
 			return rendered
 		}
 		const core = textLines.map((line) => clampLineWidth(normalizeLeadingCheckGlyph(line), width))
@@ -281,7 +281,7 @@ function patchGlobalToolBorders(): void {
 		} else {
 			result = [spacerLine, ...core, ...imageLines]
 		}
-		;(this as any)[TOOL_RENDER_CACHE] = { width, mode: toolBackgroundMode, lines: result }
+		; (this as any)[TOOL_RENDER_CACHE] = { width, mode: toolBackgroundMode, lines: result }
 		return result
 	}
 
@@ -309,7 +309,7 @@ function clearToolRenderCache(value: unknown): void {
 }
 
 function unrefTimer(timer: ReturnType<typeof setTimeout> | null | undefined): void {
-	;(timer as any)?.unref?.()
+	; (timer as any)?.unref?.()
 }
 
 const TOOL_EXECUTION_PATCH_FLAG = Symbol.for("pi-claude-style-tools:patched-tool-execution")
@@ -433,9 +433,11 @@ export function patchUserMessageRender(): void {
 			box.paddingX = 0
 			box.invalidateCache?.()
 		}
+		// 🧍‍♂️ ︎㋡ 🧍 ☃︎ ☺︎ ☻︎ ☻ ☺  ⚉ ☻︎ 
 		const theme = _themePaletteCacheTheme as any
 		const glyph = typeof theme?.fg === "function" ? theme.fg("accent", "❯") : "❯"
-		const prefix = ` ${glyph} `
+		const userIcon = typeof theme?.fg === "function" ? theme.fg("muted", "ツ") : "︎㋡"
+		const prefix = ` ${userIcon} ${glyph} `
 		const prefixW = visibleWidth(prefix)
 		// Render content narrower so all lines fit when we prepend the indent.
 		const innerWidth = Math.max(1, width - prefixW)
@@ -785,7 +787,7 @@ function _stopGlobalBlinkTimerIfEmpty(): void {
 function setupBlinkTimer(ctx: any): void {
 	const key = getBlinkKey(ctx)
 	if (!key) return
-	const invalidate = typeof ctx?.invalidate === "function" ? () => ctx.invalidate() : () => {}
+	const invalidate = typeof ctx?.invalidate === "function" ? () => ctx.invalidate() : () => { }
 	const existing = _blinkContexts.get(key)
 	if (existing) {
 		// Already tracked — just refresh the invalidate fn, skip expensive recalc
@@ -2285,10 +2287,10 @@ function offsetParsedDiff(diff: ParsedDiff, oldOffset: number, newOffset = oldOf
 			line.type === "sep"
 				? line
 				: {
-						...line,
-						oldNum: line.oldNum === null ? null : line.oldNum + oldOffset,
-						newNum: line.newNum === null ? null : line.newNum + newOffset,
-					},
+					...line,
+					oldNum: line.oldNum === null ? null : line.oldNum + oldOffset,
+					newNum: line.newNum === null ? null : line.newNum + newOffset,
+				},
 		),
 	}
 }
@@ -2484,7 +2486,7 @@ function registerThinkingLabels(pi: ExtensionAPI): void {
 		}
 		if (message?.role === "assistant") {
 			currentAssistantMessageStartMs = Date.now()
-			;(message as any)[WORKED_START_KEY] = currentAssistantMessageStartMs
+				; (message as any)[WORKED_START_KEY] = currentAssistantMessageStartMs
 		}
 	})
 	pi.on("message_update", async (event, ctx) => patchMessage(event, ctx.ui?.theme))
@@ -2500,11 +2502,11 @@ function registerThinkingLabels(pi: ExtensionAPI): void {
 			const isFinalAssistantMessage = message.stopReason !== "toolUse"
 			if (started !== undefined && isFinalAssistantMessage) {
 				const durationMs = Date.now() - started
-				// Store duration as metadata on the message object. The patched
-				// AssistantMessageComponent.render() reads it and appends the widget
-				// line outside of the message content blocks — never injected into
-				// the text that gets sent to the model.
-				;(message as any)[WORKED_DURATION_KEY] = durationMs
+					// Store duration as metadata on the message object. The patched
+					// AssistantMessageComponent.render() reads it and appends the widget
+					// line outside of the message content blocks — never injected into
+					// the text that gets sent to the model.
+					; (message as any)[WORKED_DURATION_KEY] = durationMs
 				// Persist the duration as a sidecar entry in the JSONL session file
 				// (type: "custom", does not participate in LLM context).
 				pi.appendEntry("turn_duration", { durationMs })
@@ -2525,7 +2527,7 @@ function registerThinkingLabels(pi: ExtensionAPI): void {
 				if (block && block.type === "thinking" && typeof block.thinking === "string") {
 					block.thinking = stripThinkingPresentationArtifacts(block.thinking)
 				}
-					// Legacy sessions written before this change may have the duration
+				// Legacy sessions written before this change may have the duration
 				// text injected directly into content blocks. Strip it so it doesn't
 				// appear twice alongside the widget.
 				if (block && block.type === "text" && typeof block.text === "string") {
@@ -2740,13 +2742,13 @@ function buildApplyPatchResultMeta(preview: ApplyPatchPreview): ApplyPatchResult
 		totalLines: preview.totalLines,
 		firstChange: firstChange
 			? {
-					displayPath: firstChange.displayPath,
-					kind: firstChange.kind,
-					hunks: firstChange.hunks,
-					line: firstChange.line,
-					added: firstChange.diff.added,
-					removed: firstChange.diff.removed,
-				}
+				displayPath: firstChange.displayPath,
+				kind: firstChange.kind,
+				hunks: firstChange.hunks,
+				line: firstChange.line,
+				added: firstChange.diff.added,
+				removed: firstChange.diff.removed,
+			}
 			: undefined,
 	}
 }
@@ -3407,7 +3409,7 @@ export function summarizeOpenAiToolCall(name: string, args: any, theme: Theme, s
 		default:
 			return summarizeText(
 				getStringArg(args, "path", "file_path", "url", "query", "name", "subject", "tool", "description", "prompt") ||
-					humanizeToolName(name),
+				humanizeToolName(name),
 				72,
 			)
 	}
@@ -3482,11 +3484,11 @@ function renderTaskListResult(lines: string[], expanded: boolean, theme: Theme, 
 			lines.length === 0
 				? theme.fg("muted", "no tasks")
 				: buildPreviewText(
-						lines.map((line) => theme.fg("dim", line)),
-						expanded,
-						theme,
-						previewLimit(),
-					)
+					lines.map((line) => theme.fg("dim", line)),
+					expanded,
+					theme,
+					previewLimit(),
+				)
 		return makeText(ctx.lastComponent, withBranch(text, theme))
 	}
 
@@ -3609,11 +3611,11 @@ function renderOpenAiToolResult(
 		lines.length === 1
 			? theme.fg(ctx.isError ? "error" : "dim", lines[0])
 			: buildPreviewText(
-					lines.map((line) => theme.fg(ctx.isError ? "error" : "dim", line || " ")),
-					true,
-					theme,
-					previewLimit(),
-				)
+				lines.map((line) => theme.fg(ctx.isError ? "error" : "dim", line || " ")),
+				true,
+				theme,
+				previewLimit(),
+			)
 	return makeText(ctx.lastComponent, withBranch(`${statusText}\n${preview}`, theme))
 }
 
@@ -4158,16 +4160,16 @@ export default function (pi: ExtensionAPI) {
 			const content = params.content ?? ""
 			if (old !== null && old !== content) {
 				const diff = parseDiff(old, content)
-				;(result as any).details = {
-					_type: "diff",
-					summary: summarizeDiff(diff.added, diff.removed),
-					diff,
-					language: lang(fp),
-				}
+					; (result as any).details = {
+						_type: "diff",
+						summary: summarizeDiff(diff.added, diff.removed),
+						diff,
+						language: lang(fp),
+					}
 			} else if (old === null) {
-				;(result as any).details = { _type: "new", lines: lineCount(content), filePath: fp }
+				; (result as any).details = { _type: "new", lines: lineCount(content), filePath: fp }
 			} else if (old === content) {
-				;(result as any).details = { _type: "noChange" }
+				; (result as any).details = { _type: "noChange" }
 			}
 			return result
 		},
@@ -4287,18 +4289,18 @@ export default function (pi: ExtensionAPI) {
 				const editLine =
 					localized?.line ?? (typeof baseDetails.firstChangedLine === "number" ? baseDetails.firstChangedLine : 0)
 				const diff = localized?.diff ?? diffs[0]
-				;(result as any).details = {
-					...baseDetails,
-					_type: "editInfo",
-					summary,
-					editLine,
-					hunks: countDiffHunks(diff),
-					added: diff?.added ?? 0,
-					removed: diff?.removed ?? 0,
-				}
+					; (result as any).details = {
+						...baseDetails,
+						_type: "editInfo",
+						summary,
+						editLine,
+						hunks: countDiffHunks(diff),
+						added: diff?.added ?? 0,
+						removed: diff?.removed ?? 0,
+					}
 				return result
 			}
-			;(result as any).details = {
+			; (result as any).details = {
 				...baseDetails,
 				_type: "multiEditInfo",
 				summary,
@@ -4414,27 +4416,27 @@ export default function (pi: ExtensionAPI) {
 			const rawLabel = typeof record.label === "string" ? record.label.trim() : ""
 			const label = rawLabel && rawLabel !== name && !rawLabel.includes("_") ? rawLabel : humanizeToolName(name)
 			const description = typeof record.description === "string" ? record.description : label
-			;(pi as any).registerTool({
-				name,
-				label,
-				description,
-				parameters: record.parameters,
-				prepareArguments: typeof record.prepareArguments === "function" ? record.prepareArguments : undefined,
-				async execute(toolCallId: string, params: any, signal: AbortSignal | undefined, onUpdate: any, ctx: any) {
-					return await Promise.resolve(execute(toolCallId, params, signal, onUpdate, ctx))
-				},
-				renderCall(args: any, theme: Theme, ctx: any) {
-					if (name === "apply_patch") return renderApplyPatchCall(args, theme, ctx, sp)
-					ctx.state._openAiPatchFiles = []
-					const summary = stableCallSummary(ctx, "_callSummary", () => summarizeOpenAiToolCall(name, args, theme, sp))
-					const timer = formatToolTimer(getToolElapsedMs(ctx))
-					return makeText(ctx.lastComponent, toolHeader(label, summary, theme, toolStatusDot(ctx, theme), timer))
-				},
-				renderResult(result: any, { expanded, isPartial }: any, theme: Theme, ctx: any) {
-					if (name === "apply_patch") return renderApplyPatchResult(result, isPartial, theme, ctx)
-					return renderOpenAiToolResult(name, result, expanded, isPartial, theme, ctx)
-				},
-			})
+				; (pi as any).registerTool({
+					name,
+					label,
+					description,
+					parameters: record.parameters,
+					prepareArguments: typeof record.prepareArguments === "function" ? record.prepareArguments : undefined,
+					async execute(toolCallId: string, params: any, signal: AbortSignal | undefined, onUpdate: any, ctx: any) {
+						return await Promise.resolve(execute(toolCallId, params, signal, onUpdate, ctx))
+					},
+					renderCall(args: any, theme: Theme, ctx: any) {
+						if (name === "apply_patch") return renderApplyPatchCall(args, theme, ctx, sp)
+						ctx.state._openAiPatchFiles = []
+						const summary = stableCallSummary(ctx, "_callSummary", () => summarizeOpenAiToolCall(name, args, theme, sp))
+						const timer = formatToolTimer(getToolElapsedMs(ctx))
+						return makeText(ctx.lastComponent, toolHeader(label, summary, theme, toolStatusDot(ctx, theme), timer))
+					},
+					renderResult(result: any, { expanded, isPartial }: any, theme: Theme, ctx: any) {
+						if (name === "apply_patch") return renderApplyPatchResult(result, isPartial, theme, ctx)
+						return renderOpenAiToolResult(name, result, expanded, isPartial, theme, ctx)
+					},
+				})
 			wrappedOpenAiTools.add(name)
 		}
 	}
@@ -4456,22 +4458,22 @@ export default function (pi: ExtensionAPI) {
 			if (!execute) continue
 			const label = typeof record.label === "string" ? record.label : name === "mcp" ? "MCP" : `MCP ${name}`
 			const description = typeof record.description === "string" ? record.description : "MCP tool"
-			;(pi as any).registerTool({
-				name,
-				label,
-				description,
-				parameters: record.parameters,
-				prepareArguments: typeof record.prepareArguments === "function" ? record.prepareArguments : undefined,
-				async execute(toolCallId: string, params: any, signal: AbortSignal | undefined, onUpdate: any, ctx: any) {
-					return await Promise.resolve(execute(toolCallId, params, signal, onUpdate, ctx))
-				},
-				renderCall(args: any, theme: Theme, ctx: any) {
-					return renderGenericToolCall(name, args, theme, ctx)
-				},
-				renderResult(result: any, { expanded, isPartial }: any, theme: Theme, ctx: any) {
-					return renderMcpToolResult(result, expanded, isPartial, theme, ctx)
-				},
-			})
+				; (pi as any).registerTool({
+					name,
+					label,
+					description,
+					parameters: record.parameters,
+					prepareArguments: typeof record.prepareArguments === "function" ? record.prepareArguments : undefined,
+					async execute(toolCallId: string, params: any, signal: AbortSignal | undefined, onUpdate: any, ctx: any) {
+						return await Promise.resolve(execute(toolCallId, params, signal, onUpdate, ctx))
+					},
+					renderCall(args: any, theme: Theme, ctx: any) {
+						return renderGenericToolCall(name, args, theme, ctx)
+					},
+					renderResult(result: any, { expanded, isPartial }: any, theme: Theme, ctx: any) {
+						return renderMcpToolResult(result, expanded, isPartial, theme, ctx)
+					},
+				})
 			wrappedMcpTools.add(name)
 		}
 	}
