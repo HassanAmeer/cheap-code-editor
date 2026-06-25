@@ -348,6 +348,8 @@ try {
 			"yellow.json",
 			"navy.json",
 			"neon.json",
+			"crimson-flower.json",
+			"silver.json",
 		]
 		const bundledThemesSrcDir = isBunBinary
 			? resolve(process.env.PI_PACKAGE_DIR ?? "", "theme")
