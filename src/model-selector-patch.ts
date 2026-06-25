@@ -16,6 +16,24 @@ imProto.showOAuthSelector = async function (this: any, mode: "login" | "logout")
 	)
 }
 
+// Intercept autocomplete provider setup to remove /login and /logout from the slash commands menu
+const originalSetupAutocompleteProvider = imProto.setupAutocompleteProvider
+imProto.setupAutocompleteProvider = function (this: any) {
+	originalSetupAutocompleteProvider.call(this)
+
+	const provider = this.autocompleteProvider
+	if (provider && typeof provider.getCompletions === "function") {
+		const originalGetCompletions = provider.getCompletions.bind(provider)
+		provider.getCompletions = async (prefix: string) => {
+			const completions = await originalGetCompletions(prefix)
+			if (Array.isArray(completions)) {
+				return completions.filter((c: any) => c.label !== "login" && c.label !== "logout")
+			}
+			return completions
+		}
+	}
+}
+
 // ---------------------------------------------------------------------------
 // Patch ModelSelectorComponent to group models by Fast/Grid/Slow
 // ---------------------------------------------------------------------------

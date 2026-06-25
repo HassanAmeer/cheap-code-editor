@@ -60,7 +60,9 @@ describe("parseModelRoles", () => {
 			orchestrator: "anthropic/claude-opus-4-7",
 			planner: "anthropic/claude-sonnet-4-5",
 			builder: "anthropic/claude-sonnet-4-5",
-			reviewer: "openai/gpt-4o", explorer: "openai/gpt-4o", researcher: "openai/gpt-4o",
+			reviewer: "openai/gpt-4o",
+			explorer: "openai/gpt-4o",
+			researcher: "openai/gpt-4o",
 		}
 		const { roles } = parseModelRoles(custom)
 		expect(roles).toEqual(custom)
@@ -306,7 +308,9 @@ describe("validateModelRoles", () => {
 			orchestrator: "openai/gpt-4o",
 			planner: "openai/gpt-4o",
 			builder: "anthropic/claude-sonnet-4-5",
-			reviewer: "cheap-dev/minimax-m3", explorer: "openai/gpt-4o", researcher: "openai/gpt-4o",
+			reviewer: "cheap-dev/minimax-m3",
+			explorer: "openai/gpt-4o",
+			researcher: "openai/gpt-4o",
 		}
 		const result = validateModelRoles(roles, available)
 		const flaggedRoles = new Set(result.unavailable.map((u) => u.role))
@@ -330,9 +334,7 @@ describe("validateModelRoles", () => {
 	it("handles empty available set", () => {
 		const result = validateModelRoles(DEFAULT_MODEL_ROLES, new Set())
 		const flaggedRoles = new Set(result.unavailable.map((u) => u.role))
-		expect(flaggedRoles).toEqual(
-			new Set(["orchestrator", "planner", "builder", "reviewer", "explorer", "researcher"]),
-		)
+		expect(flaggedRoles).toEqual(new Set(["orchestrator", "planner", "builder", "reviewer", "explorer", "researcher"]))
 	})
 })
 

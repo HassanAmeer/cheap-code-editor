@@ -96,7 +96,9 @@ describe("resolveOrchestrationInstructions", () => {
 				orchestrator: "anthropic/claude-opus-4-7",
 				planner: "anthropic/claude-opus-4-7",
 				builder: "anthropic/claude-sonnet-4-5",
-				reviewer: "openai/gpt-4o", explorer: "openai/gpt-4o", researcher: "openai/gpt-4o",
+				reviewer: "openai/gpt-4o",
+				explorer: "openai/gpt-4o",
+				researcher: "openai/gpt-4o",
 			},
 		})
 		expect(result).toContain("anthropic/claude-sonnet-4-5")
@@ -258,7 +260,9 @@ describe("resolveOrchestrationInstructions with custom configs", () => {
 				orchestrator: "cheap-dev/kimi-k2.6",
 				planner: "cheap-dev/kimi-k2.6",
 				builder: "anthropic/external-model",
-				reviewer: "cheap-dev/minimax-m2.7", explorer: "cheap-dev/minimax-m2.7", researcher: "cheap-dev/minimax-m2.7",
+				reviewer: "cheap-dev/minimax-m2.7",
+				explorer: "cheap-dev/minimax-m2.7",
+				researcher: "cheap-dev/minimax-m2.7",
 			},
 			customConfigs,
 		})
@@ -278,7 +282,9 @@ describe("resolveOrchestrationInstructions with custom configs", () => {
 				orchestrator: "external-orchestrator",
 				planner: "external-orchestrator",
 				builder: "cheap-dev/minimax-m2.7",
-				reviewer: "cheap-dev/minimax-m2.7", explorer: "cheap-dev/minimax-m2.7", researcher: "cheap-dev/minimax-m2.7",
+				reviewer: "cheap-dev/minimax-m2.7",
+				explorer: "cheap-dev/minimax-m2.7",
+				researcher: "cheap-dev/minimax-m2.7",
 			},
 			customConfigs,
 		})
@@ -293,7 +299,9 @@ describe("resolveOrchestrationInstructions with custom configs", () => {
 			orchestrator: "cheap-dev/kimi-k2.6",
 			planner: "cheap-dev/kimi-k2.6",
 			builder: "unknown-model",
-			reviewer: "cheap-dev/minimax-m2.7", explorer: "cheap-dev/minimax-m2.7", researcher: "cheap-dev/minimax-m2.7",
+			reviewer: "cheap-dev/minimax-m2.7",
+			explorer: "cheap-dev/minimax-m2.7",
+			researcher: "cheap-dev/minimax-m2.7",
 		}
 		const result = resolveAsString({
 			currentModelId: "unknown-model",
@@ -313,7 +321,9 @@ describe("resolveOrchestrationInstructions with custom configs", () => {
 			orchestrator: "cheap-dev/kimi-k2.6",
 			planner: "cheap-dev/kimi-k2.6",
 			builder: "bare-external/model",
-			reviewer: "cheap-dev/minimax-m2.7", explorer: "cheap-dev/minimax-m2.7", researcher: "cheap-dev/minimax-m2.7",
+			reviewer: "cheap-dev/minimax-m2.7",
+			explorer: "cheap-dev/minimax-m2.7",
+			researcher: "cheap-dev/minimax-m2.7",
 		}
 		const result = resolveAsString({
 			currentModelId: "kimi-k2.6",
@@ -334,7 +344,9 @@ describe("resolveOrchestrationInstructions with custom configs", () => {
 			orchestrator: "external-orchestrator",
 			planner: "external-orchestrator",
 			builder: "cheap-dev/minimax-m2.7",
-			reviewer: "cheap-dev/minimax-m2.7", explorer: "cheap-dev/minimax-m2.7", researcher: "cheap-dev/minimax-m2.7",
+			reviewer: "cheap-dev/minimax-m2.7",
+			explorer: "cheap-dev/minimax-m2.7",
+			researcher: "cheap-dev/minimax-m2.7",
 		}
 		const result = resolveAsString({
 			currentModelId: "external-orchestrator",
@@ -362,7 +374,9 @@ describe("resolveOrchestrationInstructions with custom configs", () => {
 			orchestrator: "anthropic/claude-opus-4-6",
 			planner: "anthropic/claude-opus-4-6",
 			builder: "cheap-dev/minimax-m2.7",
-			reviewer: "cheap-dev/minimax-m2.7", explorer: "cheap-dev/minimax-m2.7", researcher: "cheap-dev/minimax-m2.7",
+			reviewer: "cheap-dev/minimax-m2.7",
+			explorer: "cheap-dev/minimax-m2.7",
+			researcher: "cheap-dev/minimax-m2.7",
 		}
 		const result = resolveAsString({
 			currentModelId: "claude-opus-4-6",
@@ -381,7 +395,9 @@ describe("resolveOrchestrationInstructions with custom configs", () => {
 			orchestrator: "cheap-dev/kimi-k2.6",
 			planner: "cheap-dev/kimi-k2.6",
 			builder: "multi-role/model",
-			reviewer: "multi-role/model", explorer: "multi-role/model", researcher: "multi-role/model",
+			reviewer: "multi-role/model",
+			explorer: "multi-role/model",
+			researcher: "multi-role/model",
 		}
 		const result = resolveAsString({
 			currentModelId: "kimi-k2.6",
@@ -389,7 +405,9 @@ describe("resolveOrchestrationInstructions with custom configs", () => {
 			roles,
 			customConfigs,
 		})
-		expect(result).toContain("This model was configured by the user to handle builder, reviewer, explorer, researcher work.")
+		expect(result).toContain(
+			"This model was configured by the user to handle builder, reviewer, explorer, researcher work.",
+		)
 	})
 })
 

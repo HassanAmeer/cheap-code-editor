@@ -1,6 +1,5 @@
 import { spinner } from "@clack/prompts"
 import { validateApiKey } from "../../auth/validator.js"
-import { authenticateViaBrowser } from "../../cli-auth/index.js"
 import { readApiKeyFromConfigFile, writeApiKey } from "../../config.js"
 import { confirm, password } from "../prompt.js"
 import type { WizardState } from "../state.js"
@@ -67,7 +66,7 @@ export async function runAuthStep(state: WizardState, opts: { backable: boolean 
 async function promptAndValidateKey(state: WizardState, backable: boolean): Promise<void> {
 	for (;;) {
 		const entered = await password({
-			message: "Paste your Cheap API key, or press Enter to log in via browser",
+			message: "Paste your API key, or press Enter to skip (for local models)",
 			backable,
 		})
 		if (entered.kind === "back") {
@@ -82,32 +81,8 @@ async function promptAndValidateKey(state: WizardState, backable: boolean): Prom
 		let tokenToValidate: string
 
 		if (entered.value.length === 0) {
-			// Browser-based authentication — token was just created by the backend,
-			// so it's valid. Skip the separate validation roundtrip, which may
-			// hit a different environment (e.g. prod validator vs dev-master token).
-			const s = spinner()
-			s.start("Waiting for browser login…")
-			let token: string
-			try {
-				const result = await authenticateViaBrowser()
-				token = result.token
-				s.stop("Browser login succeeded.")
-			} catch (err) {
-				s.stop("Browser login failed.")
-				console.error(`  ${err instanceof Error ? err.message : String(err)}`)
-				console.log("  Paste your API key below, or press Esc to go back.")
-				continue
-			}
-
-			try {
-				writeApiKey(token)
-			} catch (err) {
-				console.error(`  Failed to save API key to config: ${err instanceof Error ? err.message : String(err)}`)
-				console.log("  Paste your API key below, or press Esc to go back.")
-				continue
-			}
-
-			state.apiKey = token
+			// User skipped API key setup because they use local models
+			state.apiKey = ""
 			return
 		}
 

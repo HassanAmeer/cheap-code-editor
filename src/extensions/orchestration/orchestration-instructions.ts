@@ -305,15 +305,10 @@ function buildResearchPhaseDirectives(ctx: PhaseDirectiveContext): string {
 
 	lines.push("#### Research phase")
 	lines.push("")
-	lines.push(
-		"- DO NOT perform web research yourself. Delegate to a Researcher agent.",
-	)
-	lines.push(
-		`- DO delegate to Agent(type: "Researcher", model: ${models}).`,
-	)
+	lines.push("- DO NOT perform web research yourself. Delegate to a Researcher agent.")
+	lines.push(`- DO delegate to Agent(type: "Researcher", model: ${models}).`)
 	return lines.join("\n")
 }
-
 
 function buildOrchestratorInstructions(
 	roles?: ModelRoles,

@@ -39,6 +39,7 @@ import chooseProjectExtension from "./extensions/choose-project/index.js"
 import claudeCodeHooksAdapter from "./extensions/claude-code-hook-adapter/index.js"
 import claudeCodeSkillsExtension from "./extensions/claude-code-skills/index.js"
 import clipboardImageExtension from "./extensions/clipboard-image.js"
+import codegraphExtension from "./extensions/codegraph/index.js"
 import configExtension from "./extensions/config/index.js"
 import deleteChatsExtension from "./extensions/delete-chats/index.js"
 import explorationGuardExtension from "./extensions/exploration-guard.js"
@@ -117,7 +118,7 @@ function getSubcommand(args: string[]): string {
 	if (args.includes("--help") || args.includes("-h")) return "help"
 	const sub = args[0]
 	if (!sub || sub.startsWith("-")) return "harness"
-	if (["setup", "config", "login", "logout", "doctor", "skills", "telemetry"].includes(sub)) return sub
+	if (["setup", "config", "doctor", "skills", "telemetry"].includes(sub)) return sub
 	return "harness"
 }
 
@@ -448,6 +449,7 @@ try {
 			configExtension,
 			chooseProjectExtension,
 			soundExtension,
+			codegraphExtension,
 			attachExtension,
 			deleteChatsExtension,
 			loopGuardExtension,

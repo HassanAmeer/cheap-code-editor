@@ -13,6 +13,7 @@ import {
 	getAgentDir,
 } from "@earendil-works/pi-coding-agent"
 import { loadConfig, readTelemetryConfig } from "../../../config.js"
+import { createSqliteSessionManager, syncSessionToLangGraph } from "../../../db/sqlite-session-manager.js"
 import { getAvailableModels } from "../../../startup-context.js"
 import { runAsAgentWorker } from "../../agent-worker-context.js"
 import { FERMENT_TOOL_NAMES } from "../../ferment/tool-names.js"
@@ -414,12 +415,20 @@ async function runAgentInner(
 	const settingsManager = SettingsManager.create(effectiveCwd, agentDir)
 	settingsManager.applyOverrides({ retry: { maxRetries: cheapConfig.retry.maxRetries } })
 
+	let sessionManager = SessionManager.inMemory(effectiveCwd)
+	if (options.sessionFile) {
+		if (options.sessionFile.startsWith("sqlite://")) {
+			const sessionId = options.sessionFile.replace("sqlite://", "")
+			sessionManager = await createSqliteSessionManager(sessionId, effectiveCwd)
+		} else {
+			sessionManager = SessionManager.open(options.sessionFile, options.sessionDir, effectiveCwd)
+		}
+	}
+
 	const sessionOpts: Parameters<typeof createAgentSession>[0] = {
 		cwd: effectiveCwd,
 		agentDir,
-		sessionManager: options.sessionFile
-			? SessionManager.open(options.sessionFile, options.sessionDir, effectiveCwd)
-			: SessionManager.inMemory(effectiveCwd),
+		sessionManager,
 		settingsManager,
 		modelRegistry: ctx.modelRegistry,
 		model,
@@ -514,6 +523,9 @@ async function runAgentInner(
 		if (event.type === "turn_end") {
 			turnCount++
 			options.onTurnEnd?.(turnCount)
+			if (options.sessionFile?.startsWith("sqlite://")) {
+				syncSessionToLangGraph(options.sessionFile.replace("sqlite://", ""), sessionManager).catch(console.error)
+			}
 			if (effectiveMaxTurns != null) {
 				if (!softLimitReached && turnCount >= effectiveMaxTurns) {
 					softLimitReached = true
@@ -698,6 +710,13 @@ export async function resumeAgent(
 	const unsubEvents = session.subscribe((event: AgentSessionEvent) => {
 		resumeInactivity.lastActivityAt = Date.now()
 		if (resumeInactivity.steered) resumeInactivity.steered = false
+
+		if (event.type === "turn_end") {
+			const sessionManager = (session as any).sessionManager
+			if (sessionManager?.sessionId) {
+				syncSessionToLangGraph(sessionManager.sessionId, sessionManager).catch(console.error)
+			}
+		}
 
 		if (event.type === "tool_execution_start") options.onToolActivity?.({ type: "start", toolName: event.toolName })
 		if (event.type === "tool_execution_end") options.onToolActivity?.({ type: "end", toolName: event.toolName })

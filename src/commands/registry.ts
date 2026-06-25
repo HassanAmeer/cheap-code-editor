@@ -9,10 +9,10 @@ import { runClaude } from "./claude.js"
 import { runConfig } from "./config.js"
 import { runCursor } from "./cursor.js"
 import { runGsd2 } from "./gsd2.js"
-import { runLogin } from "./login.js"
 import { runOpenClaw } from "./openclaw.js"
 import { runOpenCode } from "./opencode.js"
 import { runResources } from "./resources.js"
+import { runRevert } from "./revert.js"
 import { runSetupTools } from "./setup-tools.js"
 import { runSetup } from "./setup.js"
 import { runUpdate } from "./update.js"
@@ -20,7 +20,6 @@ import { runVersion } from "./version.js"
 
 export const COMMANDS: CommandDefinition[] = [
 	{ name: "setup", summary: "Run the interactive setup wizard", run: runSetup },
-	{ name: "login", summary: "Log in via browser and update your API key", run: runLogin },
 	{ name: "setup-tools", summary: "Configure coding tools in one pass", run: runSetupTools },
 	{ name: "claude", summary: "Configure Claude Code to use Cheap (and launch it)", run: runClaude },
 	{ name: "opencode", summary: "Configure OpenCode to use Cheap (and launch it)", run: runOpenCode },
@@ -30,6 +29,7 @@ export const COMMANDS: CommandDefinition[] = [
 	{ name: "update", summary: "Check for and install Cheap/package updates", run: runUpdate },
 	{ name: "config", summary: "Inspect or change cheap config (e.g. telemetry)", run: runConfig },
 	{ name: "resources", summary: "Enable or disable Cheap hooks, tools, extensions, and plugins", run: runResources },
+	{ name: "revert", summary: "Time travel: Revert the session to a previous state", run: runRevert },
 	{ name: "version", summary: "Print the cheap version", run: runVersion },
 ]
 

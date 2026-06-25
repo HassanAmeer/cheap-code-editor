@@ -53,10 +53,21 @@ export function initDb() {
       dependencies TEXT
     );
 
+    CREATE TABLE IF NOT EXISTS checkpoints (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      thread_id TEXT NOT NULL,
+      ts INTEGER NOT NULL,
+      entries TEXT NOT NULL
+    );
+
     CREATE INDEX IF NOT EXISTS events_session_id_idx ON events(session_id);
     CREATE INDEX IF NOT EXISTS events_timestamp_idx ON events(timestamp);
+    CREATE INDEX IF NOT EXISTS checkpoints_thread_id_idx ON checkpoints(thread_id);
   `)
 }
+
+// Access to underlying bun:sqlite instance for direct queries
+export const getSqliteDb = () => sqliteDb
 
 // Initialize on load
 initDb()

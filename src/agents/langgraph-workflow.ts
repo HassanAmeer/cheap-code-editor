@@ -1,4 +1,4 @@
-import { END, MemorySaver, START, StateGraph } from "@langchain/langgraph"
+import { END, START, StateGraph } from "@langchain/langgraph"
 import { CodeGraphClient } from "../context/codegraph-client.js"
 
 interface AgentState {
@@ -71,8 +71,9 @@ export const agentWorkflow = new StateGraph<AgentState>({
 	.addEdge("builderNode", "reviewerNode")
 	.addConditionalEdges("reviewerNode", reviewerToNext)
 
-export const memory = new MemorySaver()
-export const compiledWorkflow = agentWorkflow.compile({ checkpointer: memory })
+import { MemorySaver } from "@langchain/langgraph-checkpoint"
+
+export const compiledWorkflow = agentWorkflow.compile({ checkpointer: new MemorySaver() })
 
 /**
  * Execute the agent workflow for a given task.

@@ -490,7 +490,7 @@ export default function permissionsExtension(pi: ExtensionAPI): void {
 						content: `Plan created: file://${planPath}`,
 						display: true,
 					},
-					{ triggerTurn: false }
+					{ triggerTurn: false },
 				)
 			}
 		} catch {
@@ -501,9 +501,7 @@ export default function permissionsExtension(pi: ExtensionAPI): void {
 		const NO = "No"
 		const CUSTOM_MESSAGE = "Custom message"
 
-		const choice = await withWorkingHidden(ctx, () =>
-			ctx.ui.select("Are you proceed?", [YES, NO, CUSTOM_MESSAGE]),
-		)
+		const choice = await withWorkingHidden(ctx, () => ctx.ui.select("Are you proceed?", [YES, NO, CUSTOM_MESSAGE]))
 
 		if (choice === YES) {
 			changeMode(ctx, "plan", "auto", "user")
@@ -512,7 +510,7 @@ export default function permissionsExtension(pi: ExtensionAPI): void {
 			ctx.ui.notify("Implementation plan canceled.", "warning")
 			pi.sendMessage(
 				{ customType: "plan-cancel", content: "Implementation plan canceled by the user.", display: true },
-				{ triggerTurn: false }
+				{ triggerTurn: false },
 			)
 		} else if (choice === CUSTOM_MESSAGE) {
 			const customMsg = await withWorkingHidden(ctx, () => ctx.ui.input("Enter your custom message:"))
@@ -522,7 +520,7 @@ export default function permissionsExtension(pi: ExtensionAPI): void {
 				ctx.ui.notify("Implementation plan canceled.", "warning")
 				pi.sendMessage(
 					{ customType: "plan-cancel", content: "Implementation plan canceled by the user.", display: true },
-					{ triggerTurn: false }
+					{ triggerTurn: false },
 				)
 			}
 		}
