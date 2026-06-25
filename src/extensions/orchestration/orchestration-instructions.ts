@@ -299,49 +299,21 @@ function buildReviewPhaseDirectives(ctx: PhaseDirectiveContext): string {
 	return lines.join("\n")
 }
 
-function buildExplorePhaseDirectives(ctx: PhaseDirectiveContext): string {
-	const owns = ctx.ownRoles.includes("explorer")
-	const lines: string[] = []
-
-	lines.push("#### Explore phase")
-	lines.push("")
-
-	if (owns) {
-		const models = ctx.roles ? modelListForRole(ctx.roles.explorer) : "an Explorer model"
-		lines.push("- DO explore the codebase yourself for small explorations (a few files).")
-		lines.push(`- DO delegate large explorations (many files) to Agent(type: "Explore", model: ${models}).`)
-	} else {
-		const models = ctx.roles ? modelListForRole(ctx.roles.explorer) : "an Explorer model"
-		lines.push("- DO NOT explore the codebase yourself. You do not have the explorer role.")
-		lines.push(`- DO delegate to Agent(type: "Explore", model: ${models}).`)
-	}
-
-	return lines.join("\n")
-}
-
 function buildResearchPhaseDirectives(ctx: PhaseDirectiveContext): string {
-	const owns = ctx.ownRoles.includes("researcher")
 	const lines: string[] = []
+	const models = ctx.roles ? modelListForRole(ctx.roles.researcher) : "a Researcher model"
 
 	lines.push("#### Research phase")
 	lines.push("")
 	lines.push(
-		"- For quick factual lookups (library comparisons, version numbers, API references), call web_search directly — do not spawn an Agent.",
+		"- DO NOT perform web research yourself. Delegate to a Researcher agent.",
 	)
-
-	if (owns) {
-		lines.push("- DO perform deep research yourself when it requires analysis across multiple sources.")
-		lines.push(
-			`- DO delegate large research tasks to Agent(type: "Researcher") when the scope is too broad for a single web_search call.`,
-		)
-	} else {
-		const models = ctx.roles ? modelListForRole(ctx.roles.researcher) : "a Researcher model"
-		lines.push("- DO NOT perform deep research yourself. You do not have the researcher role.")
-		lines.push(`- DO delegate deep research to Agent(type: "Researcher", model: ${models}).`)
-	}
-
+	lines.push(
+		`- DO delegate to Agent(type: "Researcher", model: ${models}).`,
+	)
 	return lines.join("\n")
 }
+
 
 function buildOrchestratorInstructions(
 	roles?: ModelRoles,
@@ -370,10 +342,9 @@ Read **Your Capabilities** above. The sections below tell you exactly what to DO
 Pass plans and structured findings as Markdown files in the Documents directory, not as inline blobs in prompts.`)
 
 	parts.push(buildPlanPhaseDirectives(ctx))
+	parts.push(buildResearchPhaseDirectives(ctx))
 	parts.push(buildBuildPhaseDirectives(ctx))
 	parts.push(buildReviewPhaseDirectives(ctx))
-	parts.push(buildExplorePhaseDirectives(ctx))
-	parts.push(buildResearchPhaseDirectives(ctx))
 
 	parts.push(STEP_4_EXECUTE)
 
@@ -546,7 +517,7 @@ function formatCurrentModelCapabilities(
 		planner: "Plan",
 		builder: "Builder",
 		reviewer: "Reviewer",
-		explorer: "Explore",
+		explorer: "Explorer",
 		researcher: "Researcher",
 	}
 

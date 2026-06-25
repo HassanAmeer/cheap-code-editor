@@ -29,7 +29,7 @@ import {
 let suppressModelSelectGuard = false
 
 /** Suppress the model_select guard and metadata wizard temporarily.
- *  Used by /multi-model which handles its own metadata prompts. */
+ *  Used by /model-roles which handles its own metadata prompts. */
 export function withSuppressedModelSelectGuard<T>(fn: () => Promise<T>): Promise<T> {
 	suppressModelSelectGuard = true
 	return fn().finally(() => {

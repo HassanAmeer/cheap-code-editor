@@ -17,7 +17,7 @@ const KNOWN_LABELS: Record<string, string> = {
 export function sourceToLabel(source: string): string {
 	const known = KNOWN_LABELS[source]
 	if (known) return known
-	const name = source.startsWith("cheap.") ? source.slice(7) : source
+	const name = source.startsWith("cheap.") ? source.slice(6) : source
 	return name.charAt(0).toUpperCase() + name.slice(1)
 }
 

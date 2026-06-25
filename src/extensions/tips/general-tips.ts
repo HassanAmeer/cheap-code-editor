@@ -52,9 +52,9 @@ export const GENERAL_TIPS = [
 		message: "Run `/bug` to create GitHub issue with a bug report.",
 	},
 	{
-		id: "multi-model-roles",
+		id: "model-roles-command",
 		scope: "general",
-		message: "Run `/multi-model` to assign models to each role.",
+		message: "Run `/model-roles` to assign models to each role.",
 	},
 	{
 		id: "help-command",

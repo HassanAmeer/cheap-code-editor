@@ -172,7 +172,7 @@ describe("formatRoleDisplay", () => {
 describe("formatRoleSummaryBlock", () => {
 	it("shows role label with indented model on next line", () => {
 		const display = formatRoleSummaryBlock("orchestrator", "cheap-dev/kimi-k2.6")
-		expect(display).toMatch(/^Orchestrator:/)
+		expect(display).toMatch(/^Orchestrator \(Manager\):/)
 		expect(display).toContain("\n    cheap-dev/kimi-k2.6")
 	})
 

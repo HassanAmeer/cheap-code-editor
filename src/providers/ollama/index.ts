@@ -457,12 +457,10 @@ function refForOllamaModel(model: PiModelConfig | OllamaModel): string {
 }
 
 /**
- * Add discovered Ollama models to the explorer / reviewer / builder role pools.
- * Returns a fresh ModelRoles object — the input is not mutated. Orchestrator,
- * planner, judge, and researcher are intentionally left untouched so Ollama
- * never displaces the main agent loop or the research role (research models
- * tend to be proprietary web-search wrappers, not something a local Ollama
- * instance should be augmenting).
+ * Add discovered Ollama models to the reviewer / builder / explorer / researcher role pools.
+ * Returns a fresh ModelRoles object — the input is not mutated. Orchestrator
+ * and planner are intentionally left untouched so Ollama
+ * never displaces the main agent loop.
  */
 export function augmentModelRolesWithOllama(
 	roles: ModelRoles,
@@ -473,11 +471,10 @@ export function augmentModelRolesWithOllama(
 	const next: ModelRoles = {
 		orchestrator: roles.orchestrator,
 		planner: roles.planner,
-		judge: roles.judge,
-		researcher: roles.researcher,
 		builder: roles.builder,
 		reviewer: roles.reviewer,
 		explorer: roles.explorer,
+		researcher: roles.researcher,
 	}
 
 	for (const model of models) {
@@ -485,6 +482,7 @@ export function augmentModelRolesWithOllama(
 		next.builder = appendToAssignment(next.builder, ref)
 		next.reviewer = appendToAssignment(next.reviewer, ref)
 		next.explorer = appendToAssignment(next.explorer, ref)
+		next.researcher = appendToAssignment(next.researcher, ref)
 	}
 
 	return next

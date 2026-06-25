@@ -19,7 +19,7 @@ import { PERMISSIONS_ENV_KEY } from "./constants.js"
 import { getSessionPermissionFlagController } from "./mode-controller-registry.js"
 import { getPermissionMode, getSessionPermissionsEnvKey, setPermissionMode } from "./mode-controller.js"
 import { resolveMode } from "./mode.js"
-import { saveApprovedPlan } from "./plan-persistence.js"
+import { savePlan } from "./plan-persistence.js"
 import type { ToolPermissionPrompter } from "./prompter.js"
 import {
 	type CompoundSubcommand,
@@ -480,24 +480,52 @@ export default function permissionsExtension(pi: ExtensionAPI): void {
 
 		if (!text.includes("<!-- PLAN_COMPLETE -->") && !text.includes("<done>")) return
 
-		const EXECUTE = "Execute the plan"
-		const DECLINE = "Rework the plan"
+		let planPath: string | undefined
+		try {
+			planPath = savePlan(ctx.cwd, text)
+			if (planPath) {
+				pi.sendMessage(
+					{
+						customType: "plan-link",
+						content: `Plan created: file://${planPath}`,
+						display: true,
+					},
+					{ triggerTurn: false }
+				)
+			}
+		} catch {
+			// Non-fatal: plan persistence is best-effort.
+		}
+
+		const YES = "Yes"
+		const NO = "No"
+		const CUSTOM_MESSAGE = "Custom message"
 
 		const choice = await withWorkingHidden(ctx, () =>
-			ctx.ui.select("Plan complete. How would you like to proceed?", [EXECUTE, DECLINE]),
+			ctx.ui.select("Are you proceed?", [YES, NO, CUSTOM_MESSAGE]),
 		)
 
-		if (choice === EXECUTE) {
-			let planPath: string | undefined
-			try {
-				planPath = saveApprovedPlan(ctx.cwd, text)
-			} catch {
-				// Non-fatal: plan persistence is best-effort.
-			}
+		if (choice === YES) {
 			changeMode(ctx, "plan", "auto", "user")
 			executePlan(planPath, text)
+		} else if (choice === NO) {
+			ctx.ui.notify("Implementation plan canceled.", "warning")
+			pi.sendMessage(
+				{ customType: "plan-cancel", content: "Implementation plan canceled by the user.", display: true },
+				{ triggerTurn: false }
+			)
+		} else if (choice === CUSTOM_MESSAGE) {
+			const customMsg = await withWorkingHidden(ctx, () => ctx.ui.input("Enter your custom message:"))
+			if (customMsg) {
+				pi.sendUserMessage(customMsg)
+			} else {
+				ctx.ui.notify("Implementation plan canceled.", "warning")
+				pi.sendMessage(
+					{ customType: "plan-cancel", content: "Implementation plan canceled by the user.", display: true },
+					{ triggerTurn: false }
+				)
+			}
 		}
-		// Decline or escape: stay in plan mode.
 	})
 
 	pi.on("tool_call", async (event, ctx) => {

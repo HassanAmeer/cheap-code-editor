@@ -629,7 +629,6 @@ describe("runAgent — profile tool access", () => {
 			makeAgentConfig({
 				name: "Researcher",
 				description: "Research agent",
-				roles: ["research"],
 			}),
 		)
 		mockGetToolNamesForType.mockReturnValue(["read", "grep"])

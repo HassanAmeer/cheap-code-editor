@@ -279,7 +279,7 @@ try {
 		// prompt-enrichment reads this to build ModelRegistry with live model IDs.
 		setAvailableModels(models)
 
-		// Wire Ollama-discovered models into the explorer / reviewer / builder
+		// Wire Ollama-discovered models into the reviewer / builder
 		// role pools. Runs after setAvailableModels so the resolved roles
 		// singleton reflects the same model list the picker exposes.
 		const ollamaModelsForRoles = readOllamaModelsFromConfig(modelsJsonPath)

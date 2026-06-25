@@ -6,11 +6,8 @@
  *   - planner: designs the approach, writes specs
  *   - builder: code implementation
  *   - reviewer: code review
- *   - explorer: codebase exploration, reading files, tracing architecture
- *   - researcher: research beyond codebase — web search, documentation lookup
- *   - judge: ferment verification and final grading calls
  *
- * Delegable roles (planner, builder, reviewer, explorer) accept either a
+ * Delegable roles (planner, builder, reviewer) accept either a
  * single model string or an array of candidates. When multiple models are
  * assigned, the orchestrator selects the best fit based on tier and task
  * complexity.
@@ -29,9 +26,7 @@
  *   "modelRoles": {
  *     "orchestrator": "anthropic/claude-sonnet-4-5",
  *     "builder": ["anthropic/claude-sonnet-4-5", "openai/gpt-4o"],
- *     "reviewer": "cheap-dev/minimax-m2.7",
- *     "explorer": "cheap-dev/nemotron-3-ultra-fp4",
- *     "judge": "cheap-dev/kimi-k2.6"
+ *     "reviewer": "cheap-dev/minimax-m2.7"
  *   }
  * }
  * ```
@@ -66,10 +61,8 @@ export interface ModelRoles {
 	reviewer: RoleModelAssignment
 	/** Codebase exploration model(s). */
 	explorer: RoleModelAssignment
-	/** Research model(s): research beyond codebase — web search, documentation lookup, external sources. */
+	/** Research model(s): web and docs research. */
 	researcher: RoleModelAssignment
-	/** Ferment judge model(s): verification triage and final grading calls. */
-	judge: RoleModelAssignment
 }
 
 const DELEGABLE_ROLE_KEYS: readonly (keyof Omit<ModelRoles, "orchestrator">)[] = [
@@ -78,21 +71,19 @@ const DELEGABLE_ROLE_KEYS: readonly (keyof Omit<ModelRoles, "orchestrator">)[] =
 	"reviewer",
 	"explorer",
 	"researcher",
-	"judge",
 ]
 const ROLE_KEYS: readonly (keyof ModelRoles)[] = ["orchestrator", ...DELEGABLE_ROLE_KEYS]
 
 const HARNESS_SETTINGS_PATH = join(homedir(), ".config", "cheap", "harness", "settings.json")
 
-/** Hardcoded default model-to-role assignment. Users override via /multi-model. */
+/** Hardcoded default model-to-role assignment. Users override via /model-roles. */
 export const DEFAULT_MODEL_ROLES: Readonly<ModelRoles> = {
 	orchestrator: "cheap-dev/minimax-m3",
 	planner: "cheap-dev/minimax-m3",
 	builder: ["cheap-dev/minimax-m3"],
 	reviewer: ["cheap-dev/minimax-m3"],
-	explorer: "cheap-dev/nemotron-3-ultra-fp4",
-	researcher: "cheap-dev/minimax-m3",
-	judge: "cheap-dev/minimax-m3",
+	explorer: ["cheap-dev/minimax-m3"],
+	researcher: ["cheap-dev/minimax-m3"],
 }
 
 export interface ModelRolesWarning {

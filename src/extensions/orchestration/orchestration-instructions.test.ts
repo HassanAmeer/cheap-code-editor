@@ -50,7 +50,6 @@ describe("resolveOrchestrationInstructions", () => {
 		expect(result).toContain("## Your Team")
 		expect(result).toContain("### Builder")
 		expect(result).toContain("### Reviewer")
-		expect(result).toContain("### Explorer")
 	})
 
 	it("shows Your Capabilities section with orchestrator roles", () => {
@@ -60,7 +59,7 @@ describe("resolveOrchestrationInstructions", () => {
 			roles: DEFAULT_MODEL_ROLES,
 		})
 		expect(result).toContain("## Your Capabilities")
-		expect(result).toContain("You have these roles: **planner, builder, reviewer, researcher**")
+		expect(result).toContain("You have these roles: **planner, builder, reviewer, explorer, researcher**")
 	})
 
 	it("uses DO/DONT directives in Step 3", () => {
@@ -71,10 +70,9 @@ describe("resolveOrchestrationInstructions", () => {
 		})
 		expect(result).toContain("Your responsibilities per phase")
 		expect(result).toContain("#### Plan phase")
+		expect(result).toContain("#### Research phase")
 		expect(result).toContain("#### Build phase")
 		expect(result).toContain("#### Review phase")
-		expect(result).toContain("#### Explore phase")
-		expect(result).toContain("#### Research phase")
 	})
 
 	it("instructs to use matching persona for each step", () => {
@@ -98,15 +96,11 @@ describe("resolveOrchestrationInstructions", () => {
 				orchestrator: "anthropic/claude-opus-4-7",
 				planner: "anthropic/claude-opus-4-7",
 				builder: "anthropic/claude-sonnet-4-5",
-				reviewer: "openai/gpt-4o",
-				explorer: "cheap-dev/nemotron-3-ultra-fp4",
-				researcher: "cheap-dev/nemotron-3-ultra-fp4",
-				judge: "cheap-dev/claude-opus-4-6",
+				reviewer: "openai/gpt-4o", explorer: "openai/gpt-4o", researcher: "openai/gpt-4o",
 			},
 		})
 		expect(result).toContain("anthropic/claude-sonnet-4-5")
 		expect(result).toContain("openai/gpt-4o")
-		expect(result).toContain("cheap-dev/nemotron-3-ultra-fp4")
 	})
 
 	it("generates DO directive for plan when orchestrator is planner", () => {
@@ -140,7 +134,10 @@ describe("resolveOrchestrationInstructions", () => {
 		const result = resolveAsString({
 			currentModelId: "minimax-m3",
 			registry,
-			roles: DEFAULT_MODEL_ROLES,
+			roles: {
+				...DEFAULT_MODEL_ROLES,
+				builder: ["cheap-dev/minimax-m3", "cheap-dev/nemotron-3-ultra-fp4"],
+			},
 		})
 		expect(result).toContain("Tier: heavy")
 		expect(result).toContain("Tier: light")
@@ -234,9 +231,8 @@ describe("resolveOrchestrationInstructions", () => {
 				planner: "cheap-dev/kimi-k2.6",
 				builder: ["cheap-dev/minimax-m2.7", "cheap-dev/kimi-k2.6"],
 				reviewer: ["cheap-dev/kimi-k2.6", "cheap-dev/minimax-m2.7"],
-				explorer: "cheap-dev/nemotron-3-ultra-fp4",
-				researcher: "cheap-dev/nemotron-3-ultra-fp4",
-				judge: "cheap-dev/kimi-k2.6",
+				explorer: ["cheap-dev/kimi-k2.6", "cheap-dev/minimax-m2.7"],
+				researcher: ["cheap-dev/kimi-k2.6", "cheap-dev/minimax-m2.7"],
 			},
 		})
 		expect(result).toContain("### Builder")
@@ -262,10 +258,7 @@ describe("resolveOrchestrationInstructions with custom configs", () => {
 				orchestrator: "cheap-dev/kimi-k2.6",
 				planner: "cheap-dev/kimi-k2.6",
 				builder: "anthropic/external-model",
-				reviewer: "cheap-dev/minimax-m2.7",
-				explorer: "cheap-dev/nemotron-3-super-fp4",
-				researcher: "cheap-dev/nemotron-3-super-fp4",
-				judge: "cheap-dev/kimi-k2.6",
+				reviewer: "cheap-dev/minimax-m2.7", explorer: "cheap-dev/minimax-m2.7", researcher: "cheap-dev/minimax-m2.7",
 			},
 			customConfigs,
 		})
@@ -285,10 +278,7 @@ describe("resolveOrchestrationInstructions with custom configs", () => {
 				orchestrator: "external-orchestrator",
 				planner: "external-orchestrator",
 				builder: "cheap-dev/minimax-m2.7",
-				reviewer: "cheap-dev/minimax-m2.7",
-				explorer: "cheap-dev/nemotron-3-super-fp4",
-				researcher: "cheap-dev/nemotron-3-super-fp4",
-				judge: "external-orchestrator",
+				reviewer: "cheap-dev/minimax-m2.7", explorer: "cheap-dev/minimax-m2.7", researcher: "cheap-dev/minimax-m2.7",
 			},
 			customConfigs,
 		})
@@ -303,10 +293,7 @@ describe("resolveOrchestrationInstructions with custom configs", () => {
 			orchestrator: "cheap-dev/kimi-k2.6",
 			planner: "cheap-dev/kimi-k2.6",
 			builder: "unknown-model",
-			reviewer: "cheap-dev/minimax-m2.7",
-			explorer: "cheap-dev/nemotron-3-super-fp4",
-			researcher: "cheap-dev/nemotron-3-super-fp4",
-			judge: "cheap-dev/kimi-k2.6",
+			reviewer: "cheap-dev/minimax-m2.7", explorer: "cheap-dev/minimax-m2.7", researcher: "cheap-dev/minimax-m2.7",
 		}
 		const result = resolveAsString({
 			currentModelId: "unknown-model",
@@ -326,10 +313,7 @@ describe("resolveOrchestrationInstructions with custom configs", () => {
 			orchestrator: "cheap-dev/kimi-k2.6",
 			planner: "cheap-dev/kimi-k2.6",
 			builder: "bare-external/model",
-			reviewer: "cheap-dev/minimax-m2.7",
-			explorer: "cheap-dev/nemotron-3-super-fp4",
-			researcher: "cheap-dev/nemotron-3-super-fp4",
-			judge: "cheap-dev/kimi-k2.6",
+			reviewer: "cheap-dev/minimax-m2.7", explorer: "cheap-dev/minimax-m2.7", researcher: "cheap-dev/minimax-m2.7",
 		}
 		const result = resolveAsString({
 			currentModelId: "kimi-k2.6",
@@ -350,10 +334,7 @@ describe("resolveOrchestrationInstructions with custom configs", () => {
 			orchestrator: "external-orchestrator",
 			planner: "external-orchestrator",
 			builder: "cheap-dev/minimax-m2.7",
-			reviewer: "cheap-dev/minimax-m2.7",
-			explorer: "cheap-dev/nemotron-3-super-fp4",
-			researcher: "cheap-dev/nemotron-3-super-fp4",
-			judge: "external-orchestrator",
+			reviewer: "cheap-dev/minimax-m2.7", explorer: "cheap-dev/minimax-m2.7", researcher: "cheap-dev/minimax-m2.7",
 		}
 		const result = resolveAsString({
 			currentModelId: "external-orchestrator",
@@ -381,10 +362,7 @@ describe("resolveOrchestrationInstructions with custom configs", () => {
 			orchestrator: "anthropic/claude-opus-4-6",
 			planner: "anthropic/claude-opus-4-6",
 			builder: "cheap-dev/minimax-m2.7",
-			reviewer: "cheap-dev/minimax-m2.7",
-			explorer: "cheap-dev/nemotron-3-super-fp4",
-			researcher: "cheap-dev/nemotron-3-super-fp4",
-			judge: "cheap-dev/kimi-k2.6",
+			reviewer: "cheap-dev/minimax-m2.7", explorer: "cheap-dev/minimax-m2.7", researcher: "cheap-dev/minimax-m2.7",
 		}
 		const result = resolveAsString({
 			currentModelId: "claude-opus-4-6",
@@ -403,10 +381,7 @@ describe("resolveOrchestrationInstructions with custom configs", () => {
 			orchestrator: "cheap-dev/kimi-k2.6",
 			planner: "cheap-dev/kimi-k2.6",
 			builder: "multi-role/model",
-			reviewer: "multi-role/model",
-			explorer: "cheap-dev/nemotron-3-super-fp4",
-			researcher: "cheap-dev/nemotron-3-super-fp4",
-			judge: "cheap-dev/kimi-k2.6",
+			reviewer: "multi-role/model", explorer: "multi-role/model", researcher: "multi-role/model",
 		}
 		const result = resolveAsString({
 			currentModelId: "kimi-k2.6",
@@ -414,7 +389,7 @@ describe("resolveOrchestrationInstructions with custom configs", () => {
 			roles,
 			customConfigs,
 		})
-		expect(result).toContain("This model was configured by the user to handle builder, reviewer work.")
+		expect(result).toContain("This model was configured by the user to handle builder, reviewer, explorer, researcher work.")
 	})
 })
 

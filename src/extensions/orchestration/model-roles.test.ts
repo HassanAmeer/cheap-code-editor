@@ -60,10 +60,7 @@ describe("parseModelRoles", () => {
 			orchestrator: "anthropic/claude-opus-4-7",
 			planner: "anthropic/claude-sonnet-4-5",
 			builder: "anthropic/claude-sonnet-4-5",
-			reviewer: "openai/gpt-4o",
-			explorer: "cheap-dev/nemotron-3-ultra-fp4",
-			researcher: "cheap-dev/nemotron-3-ultra-fp4",
-			judge: "cheap-dev/claude-opus-4-6",
+			reviewer: "openai/gpt-4o", explorer: "openai/gpt-4o", researcher: "openai/gpt-4o",
 		}
 		const { roles } = parseModelRoles(custom)
 		expect(roles).toEqual(custom)
@@ -147,13 +144,11 @@ describe("parseModelRoles", () => {
 			planner: "anthropic/claude-sonnet-4-5",
 			builder: null,
 			reviewer: 123,
-			explorer: "cheap-dev/nemotron-3-ultra-fp4",
 		})
 		expect(roles.orchestrator).toBe("anthropic/claude-opus-4-7")
 		expect(roles.planner).toBe("anthropic/claude-sonnet-4-5")
 		expect(roles.builder).toBe(DEFAULT_MODEL_ROLES.builder)
 		expect(roles.reviewer).toBe(DEFAULT_MODEL_ROLES.reviewer)
-		expect(roles.explorer).toBe("cheap-dev/nemotron-3-ultra-fp4")
 		// null is skipped silently, number warns
 		expect(warnings).toHaveLength(1)
 		expect(warnings[0].role).toBe("reviewer")
@@ -226,19 +221,9 @@ describe("DEFAULT_MODEL_ROLES", () => {
 		expect(reviewers).toContain("cheap-dev/minimax-m3")
 	})
 
-	it("explorer pool contains nemotron", () => {
-		const explorers = normalizeRoleModels(DEFAULT_MODEL_ROLES.explorer)
-		expect(explorers).toContain("cheap-dev/nemotron-3-ultra-fp4")
-	})
-
 	it("planner pool contains minimax-m3", () => {
 		const planners = normalizeRoleModels(DEFAULT_MODEL_ROLES.planner)
 		expect(planners).toContain("cheap-dev/minimax-m3")
-	})
-
-	it("judge defaults to orchestrator model", () => {
-		const judges = normalizeRoleModels(DEFAULT_MODEL_ROLES.judge)
-		expect(judges).toContain(DEFAULT_MODEL_ROLES.orchestrator)
 	})
 
 	it("all defaults contain a provider prefix", () => {
@@ -321,17 +306,14 @@ describe("validateModelRoles", () => {
 			orchestrator: "openai/gpt-4o",
 			planner: "openai/gpt-4o",
 			builder: "anthropic/claude-sonnet-4-5",
-			reviewer: "cheap-dev/minimax-m3",
-			explorer: "google/gemini-pro",
-			researcher: "cheap-dev/nemotron-3-ultra-fp4",
-			judge: "cheap-dev/kimi-k2.6",
+			reviewer: "cheap-dev/minimax-m3", explorer: "openai/gpt-4o", researcher: "openai/gpt-4o",
 		}
 		const result = validateModelRoles(roles, available)
 		const flaggedRoles = new Set(result.unavailable.map((u) => u.role))
 		expect(flaggedRoles).toContain("orchestrator")
 		expect(flaggedRoles).toContain("planner")
 		expect(flaggedRoles).toContain("builder")
-		expect(flaggedRoles).toContain("explorer")
+		expect(flaggedRoles).toContain("researcher")
 		expect(flaggedRoles).not.toContain("reviewer")
 	})
 
@@ -347,10 +329,9 @@ describe("validateModelRoles", () => {
 
 	it("handles empty available set", () => {
 		const result = validateModelRoles(DEFAULT_MODEL_ROLES, new Set())
-		expect(result.unavailable.length).toBeGreaterThanOrEqual(5)
 		const flaggedRoles = new Set(result.unavailable.map((u) => u.role))
 		expect(flaggedRoles).toEqual(
-			new Set(["orchestrator", "planner", "builder", "reviewer", "explorer", "researcher", "judge"]),
+			new Set(["orchestrator", "planner", "builder", "reviewer", "explorer", "researcher"]),
 		)
 	})
 })

@@ -38,16 +38,15 @@ function syncOrchestratorRef(roles: ModelRoles): void {
 }
 
 const ROLE_LABELS: Record<keyof ModelRoles, { label: string; description: string }> = {
-	orchestrator: { label: "Orchestrator", description: "main model, delegates work" },
+	orchestrator: { label: "Orchestrator (Manager)", description: "main model, delegates work" },
 	planner: { label: "Planner", description: "designs the approach, writes specs" },
 	builder: { label: "Builder", description: "code implementation" },
 	reviewer: { label: "Reviewer", description: "code review" },
 	explorer: { label: "Explorer", description: "codebase exploration" },
-	researcher: { label: "Researcher", description: "research beyond codebase, web search" },
-	judge: { label: "Judge", description: "ferment verification and grading" },
+	researcher: { label: "Researcher", description: "web and docs research" },
 }
 
-const DELEGABLE_KEYS: (keyof ModelRoles)[] = ["planner", "builder", "reviewer", "explorer", "researcher", "judge"]
+const DELEGABLE_KEYS: (keyof ModelRoles)[] = ["planner", "builder", "reviewer", "explorer", "researcher"]
 
 const ROLE_KEYS: (keyof ModelRoles)[] = ["orchestrator", ...DELEGABLE_KEYS]
 
@@ -304,8 +303,8 @@ function createToggleSelect(
 }
 
 export function registerModelRolesCommand(pi: ExtensionAPI): void {
-	pi.registerCommand("multi-model", {
-		description: "Configure model roles (orchestrator, planner, builder, reviewer, explorer, researcher, judge)",
+	pi.registerCommand("model-roles", {
+		description: "Configure model roles (orchestrator, planner, builder, reviewer, explorer, researcher)",
 		async handler(_args, ctx) {
 			if (!ctx.hasUI) {
 				ctx.ui.notify("Model roles configuration requires an interactive session.", "warning")

@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, writeFileSync } from "node:fs"
 import { resolve } from "node:path"
 
-export function saveApprovedPlan(cwd: string, planText: string): string {
+export function savePlan(cwd: string, planText: string): string {
 	const plansDir = resolve(cwd, ".cheap", "plans")
 	if (!existsSync(plansDir)) mkdirSync(plansDir, { recursive: true })
 	const fileName = `plan-${Date.now()}.md`

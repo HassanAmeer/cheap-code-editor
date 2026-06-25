@@ -133,7 +133,7 @@ setProcessOrchestratorRef(getOrchestratorModelRef())
 
 /**
  * Orchestrator model ID (without provider prefix).
- * Reads from the live model-roles config — updates when `/multi-model` changes roles.
+ * Reads from the live model-roles config — updates when `/model-roles` changes roles.
  */
 export function getOrchestratorModelId(): string {
 	return modelIdFromRef(getModelRoles().orchestrator)
@@ -141,7 +141,7 @@ export function getOrchestratorModelId(): string {
 
 /**
  * Orchestrator model reference (provider/model-id).
- * Reads from the live model-roles config — updates when `/multi-model` changes roles.
+ * Reads from the live model-roles config — updates when `/model-roles` changes roles.
  */
 export function getOrchestratorModelRef(): string {
 	return getModelRoles().orchestrator
