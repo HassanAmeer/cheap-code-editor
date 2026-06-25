@@ -335,6 +335,19 @@ try {
 			"github-light.json",
 			"solarized-dark.json",
 			"solarized-light.json",
+			"chocolate.json",
+			"matcha-tea.json",
+			"black-tea.json",
+			"midnight-blue.json",
+			"sunset-glow.json",
+			"deep-forest.json",
+			"lavender-frost.json",
+			"peach-rose.json",
+			"cyan.json",
+			"red.json",
+			"yellow.json",
+			"navy.json",
+			"neon.json",
 		]
 		const bundledThemesSrcDir = isBunBinary
 			? resolve(process.env.PI_PACKAGE_DIR ?? "", "theme")
