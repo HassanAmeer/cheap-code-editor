@@ -20,14 +20,14 @@ export class LogoHeader implements Component {
 		this.logoLines = buildLogoLines(this.theme)
 	}
 
-	render(width: number): string[] {
+	render(terminalWidth: number): string[] {
 		const { theme } = this
 		const accentOpen = theme.getFgAnsi("accent")
 
 		// Logo dimensions
 		const logoWidth = Math.max(...this.logoLines.map((l) => visibleWidth(l)))
 		const logoHeight = this.logoLines.length
-		const midGap = 2
+		const midGap = 1
 
 		// Compute how much room the version prefix takes so we can tell
 		// buildInfoLines how much space remains for the folder before the
@@ -49,25 +49,31 @@ export class LogoHeader implements Component {
 		})
 
 		// Compute right column width with progressive padding reduction for narrow terminals
-		let leftPad = 10
-		let midPad = 10
+		let leftPad = 2
+		let midPad = 3
 		let rightPad = 1
 		let endPad = 1
-		let rightColWidth = width - (2 + leftPad + leftContentWidth + midPad + 1 + rightPad + endPad)
+		const maxRightColWidth = 50
+		let rightColWidth = Math.min(
+			maxRightColWidth,
+			terminalWidth - (2 + leftPad + leftContentWidth + midPad + 1 + rightPad + endPad),
+		)
 
 		if (rightColWidth < 8) {
 			midPad = 0
 			rightPad = 0
-			rightColWidth = width - (2 + leftPad + leftContentWidth + 1 + endPad)
+			rightColWidth = Math.min(maxRightColWidth, terminalWidth - (2 + leftPad + leftContentWidth + 1 + endPad))
 		}
 		if (rightColWidth < 8) {
 			leftPad = 0
 			endPad = 0
-			rightColWidth = width - (2 + leftContentWidth + 1)
+			rightColWidth = Math.min(maxRightColWidth, terminalWidth - (2 + leftContentWidth + 1))
 		}
 		if (rightColWidth < 1) {
 			rightColWidth = 1
 		}
+
+		const boxWidth = 2 + leftPad + leftContentWidth + midPad + 1 + rightPad + rightColWidth + endPad
 
 		// Right column content (static text — no dynamic tip mechanism exists yet)
 		const accentText = (text: string) => theme.fg("accent", text)
@@ -82,10 +88,10 @@ export class LogoHeader implements Component {
 
 		const rightLines: string[] = [...labelWrap, ...wrap1, hrLine, ...wrap2]
 
-		// Left column: generous vertical padding plus centered logo + info lines
+		// Left column: very minimal vertical padding plus centered logo + info lines
 		const infoLineCount = infoLinesFitted.length
 		const unitHeight = logoHeight + midGap + infoLineCount
-		const minVerticalPad = 2
+		const minVerticalPad = 0
 		const leftContentHeight = unitHeight + 2 * minVerticalPad
 		const totalHeight = Math.max(rightLines.length, leftContentHeight)
 
@@ -96,7 +102,7 @@ export class LogoHeader implements Component {
 		const result: string[] = []
 
 		// Top border
-		const borderInner = Math.max(0, width - 2)
+		const borderInner = Math.max(0, boxWidth - 2)
 		result.push(accentBorder(`┌${"─".repeat(borderInner)}┐`))
 
 		for (let row = 0; row < totalHeight; row++) {
