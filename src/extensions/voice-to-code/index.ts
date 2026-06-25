@@ -1,9 +1,11 @@
-import { execSync, spawn } from "node:child_process"
+import { exec, spawn } from "node:child_process"
 import { existsSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
+import { promisify } from "node:util"
 import type { ExtensionAPI, ExtensionCommandContext } from "@earendil-works/pi-coding-agent"
 
+const execAsync = promisify(exec)
 // The dynamic voice extension
 export default function voiceToCodeExtension(pi: ExtensionAPI) {
 	pi.registerCommand("voice", {
@@ -28,11 +30,14 @@ export default function voiceToCodeExtension(pi: ExtensionAPI) {
 			const recordPath = join(voiceDepsPath, "node_modules", "node-record-lpcm16")
 
 			if (!existsSync(transformersPath) || !existsSync(recordPath)) {
-				ctx.ui.notify("Voice module not found. Downloading dependencies in background... (One time only)", "info")
+				const { spinner } = require("@clack/prompts")
+				const s = spinner()
+				s.start("Downloading voice dependencies... (This might take a moment)")
 				try {
-					execSync("bun install @xenova/transformers node-record-lpcm16", { cwd: voiceDepsPath, stdio: "ignore" })
-					ctx.ui.notify("Dependencies downloaded successfully!", "info")
+					await execAsync("bun install @xenova/transformers node-record-lpcm16", { cwd: voiceDepsPath })
+					s.stop("Dependencies downloaded successfully!")
 				} catch (err) {
+					s.stop("Failed to install dependencies.")
 					ctx.ui.notify("Failed to install dependencies globally. Please check your internet connection.", "error")
 					return
 				}
@@ -43,13 +48,16 @@ export default function voiceToCodeExtension(pi: ExtensionAPI) {
 
 			// Ensure sox is installed, as it is required by node-record-lpcm16 on macOS
 			try {
-				execSync("which sox", { stdio: "ignore" })
+				await execAsync("which sox")
 			} catch (err) {
-				ctx.ui.notify("Sox not found. Auto-installing via Homebrew... (Please wait)", "info")
+				const { spinner } = require("@clack/prompts")
+				const s = spinner()
+				s.start("Sox not found. Auto-installing via Homebrew... (Please wait)")
 				try {
-					execSync("brew install sox", { stdio: "ignore" })
-					ctx.ui.notify("Sox installed successfully!", "info")
+					await execAsync("brew install sox")
+					s.stop("Sox installed successfully!")
 				} catch (brewErr) {
+					s.stop("Failed to auto-install sox.")
 					ctx.ui.notify("Failed to auto-install sox. Please install it manually using: brew install sox", "error")
 					return
 				}

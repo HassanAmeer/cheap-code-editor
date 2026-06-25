@@ -1,7 +1,7 @@
 import { modelsAreEqual } from "@earendil-works/pi-ai"
-import { InteractiveMode, ModelSelectorComponent } from "@earendil-works/pi-coding-agent"
+import { InteractiveMode, ModelSelectorComponent, getSelectListTheme } from "@earendil-works/pi-coding-agent"
 import { Spacer, Text, getKeybindings } from "@earendil-works/pi-tui"
-import { ANSI, fg, semanticFg } from "./ansi.js"
+import { ANSI, fg, semanticFg, resolvedAccentFg, TEAL_FG, RST } from "./ansi.js"
 import { modelInfoMap } from "./providers/index.js"
 
 // ---------------------------------------------------------------------------
@@ -161,12 +161,12 @@ modelSelectorProto.handleInput = function (this: any, keyData: any) {
 			this.selectedIndex++
 		}
 		this.updateList()
-	} else if (keyData.name === "left") {
+	} else if (kb.matches(keyData, "tui.editor.cursorLeft")) {
 		if (this.selectedIndex > 0 && this.selectableItemsCoords[this.selectedIndex - 1].y === currentItem.y) {
 			this.selectedIndex--
 			this.updateList()
 		}
-	} else if (keyData.name === "right") {
+	} else if (kb.matches(keyData, "tui.editor.cursorRight")) {
 		if (
 			this.selectedIndex < this.selectableItemsCoords.length - 1 &&
 			this.selectableItemsCoords[this.selectedIndex + 1].y === currentItem.y
@@ -277,35 +277,22 @@ modelSelectorProto.updateList = function (this: any) {
 					? isMultiModelEnabled
 					: !isMultiModelEnabled && modelsAreEqual(this.currentModel, item.model)
 
-				const prefix = isSelected ? fg(ANSI.accent, "> ") : "  "
+				const listTheme = getSelectListTheme()
 
-				// Display name (already includes provider in parentheses)
 				const displayName = item._isMultiModel ? "multi-model" : item.model.name || item.id
-				const nameColor = isSelected ? fg(ANSI.accent, displayName) : fg(ANSI.dim, displayName)
+				
+				let cellText = ""
+				let rawLength = 0
 
-				// Tokens from modelInfoMap (survives round-trip) or fall back to _tokens / contextWindow
-				const modelId = item._isMultiModel ? "" : item.model?.id || item.id || ""
-				const mapInfo = modelInfoMap.get(modelId)
-				const tokensLabel: string =
-					mapInfo?.tokens ??
-					(item.model as any)._tokens ??
-					(() => {
-						const n = item.model.contextWindow || 0
-						return n >= 1048576 ? `${Math.round(n / 1048576)}M` : n >= 1024 ? `${Math.round(n / 1024)}k` : "8k"
-					})()
-				const tokenText = ` (${tokensLabel} tokens)`
-				const tokenColor = isSelected ? fg("36", tokenText) : fg(ANSI.dim, tokenText)
-
-				// Support tags from modelInfoMap or fall back to _support
-				const supportArr: string[] = mapInfo?.support ?? (item.model as any)._support ?? []
-				const supportText = supportArr.length > 0 ? ` [${supportArr.join(", ")}]` : ""
-				const supportColor = isSelected ? fg("33", supportText) : fg(ANSI.dim, supportText)
-
-				const checkmark = isCurrent ? `${semanticFg("success")} ✓` : ""
-
-				const cellText = `${prefix}${nameColor}${tokenColor}${supportColor}${checkmark}`
-
-				const rawLength = 2 + displayName.length + tokenText.length + supportText.length + (isCurrent ? 2 : 0)
+				if (isSelected) {
+					const checkmarkText = isCurrent ? ` ✓` : ""
+					cellText = `${listTheme.selectedPrefix("> ")}${listTheme.selectedText(displayName)}${isCurrent ? semanticFg("success") + checkmarkText : ""}`
+					rawLength = 2 + displayName.length + checkmarkText.length
+				} else {
+					const checkmarkText = isCurrent ? ` ✓` : ""
+					cellText = `  ${fg(ANSI.dim, displayName)}${isCurrent ? semanticFg("success") + checkmarkText : ""}`
+					rawLength = 2 + displayName.length + checkmarkText.length
+				}
 
 				if (columns > 1 && idx < row.items.length - 1) {
 					const padding = Math.max(0, colWidth - rawLength)

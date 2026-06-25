@@ -1,16 +1,17 @@
 import { existsSync, readFileSync } from "node:fs"
 import { homedir } from "node:os"
 import { join } from "node:path"
+import { fileURLToPath } from "node:url"
 import type { PiModelConfig } from "../models.js"
-import { geminiModels } from "./gemini/index.js"
 import { providerKeys } from "./keys.js"
-import { nvidiaModels } from "./nvidia/index.js"
-import { openaiModels } from "./openai/index.js"
-import { opencodeModels } from "./opencode/index.js"
-import { openrouterModels } from "./openrouter/index.js"
-import { poolsideModels } from "./poolside/index.js"
-import { vercelModels } from "./vercel/index.js"
-import { zenmuxModels } from "./zenmux/index.js"
+
+let modelsData: any = {}
+try {
+	const modelsPath = fileURLToPath(new URL("../providers_models/models.json", import.meta.url))
+	modelsData = JSON.parse(readFileSync(modelsPath, "utf-8"))
+} catch (e) {
+	console.error("Failed to load models.json", e)
+}
 
 // Helper to parse "tokens" string (e.g. "128k", "2M") to number
 function parseTokens(tokenStr: string): number {
@@ -25,28 +26,44 @@ function parseTokens(tokenStr: string): number {
 }
 
 function mapToPiModelConfig(model: any, providerId: string): PiModelConfig {
-	const isVision = Array.isArray(model.support) && model.support.includes("vision")
-	const ctx = parseTokens(model.tokens)
+	const isVision = (Array.isArray(model.support) && model.support.includes("vision")) || model.is_vision_image === true
 
-	const showProvider = process.env.SHOW_PROVIDER_NAMES !== "false"
-	let formattedName = model.name
-	if (showProvider) {
-		formattedName = `${model.name} (${model.provider || providerId})`
+	let ctx = 8192
+	if (model.context_size) {
+		ctx = model.context_size
+	} else if (model.tokens) {
+		ctx = parseTokens(model.tokens)
 	}
 
-	const tokensLabel = model.tokens || "8k"
+	const rawName = model.name || model.show_name || "Unknown Model"
+	const formattedName = rawName
+
+	let tokensLabel = model.tokens
+	if (!tokensLabel && model.context_size) {
+		tokensLabel = model.context_size >= 1048576
+			? `${Math.round(model.context_size / 1048576)}M`
+			: `${Math.round(model.context_size / 1024)}k`
+	}
+	if (!tokensLabel) tokensLabel = "8k"
 
 	let category = "sometimes slow"
-	if (model.fast === true) category = "Fast"
+	if (model.fast === true || model.is_fast === true) category = "Fast"
 	if (model.grid === true) category = "Grid"
 
 	// support tags e.g. ["text", "code", "vision"]
-	const supportTags: string[] = Array.isArray(model.support) ? model.support : ["text"]
+	let supportTags: string[] = ["text"]
+	if (Array.isArray(model.support)) {
+		supportTags = model.support
+	} else {
+		if (model.code_exec || model.is_chat) supportTags.push("code")
+		if (model.is_vision_image) supportTags.push("vision")
+		if (model.web_search) supportTags.push("search")
+	}
 
 	const cfg: PiModelConfig = {
-		id: model.value,
+		id: model.value || model.model_id,
 		name: formattedName,
-		reasoning: false,
+		reasoning: model.reasoning || false,
 		input: isVision ? ["text", "image"] : ["text"],
 		contextWindow: ctx,
 		maxTokens: Math.min(ctx, 8192),
@@ -60,7 +77,7 @@ function mapToPiModelConfig(model: any, providerId: string): PiModelConfig {
 		_support: supportTags,
 	}
 	// Store in module-level map so it survives models.json round-trip
-	modelInfoMap.set(model.value, { category, tokens: tokensLabel, support: supportTags })
+	modelInfoMap.set(cfg.id, { category, tokens: tokensLabel, support: supportTags })
 	return cfg
 }
 
@@ -79,7 +96,7 @@ export function getCustomProvidersConfig(): Record<
 		if (existsSync(overridesPath)) {
 			overrides = JSON.parse(readFileSync(overridesPath, "utf-8"))
 		}
-	} catch (e) {}
+	} catch (e) { }
 
 	let providerOverrides = overrides.providers || {}
 	const modelOverrides = overrides.models || {}
@@ -94,36 +111,36 @@ export function getCustomProvidersConfig(): Record<
 		{
 			id: "opencode",
 			keyData: providerKeys.opencode,
-			models: opencodeModels,
+			models: modelsData.opencode || [],
 			defaultBase: "https://opencode.ai/zen/v1",
 		},
 		{
 			id: "nvidia",
 			keyData: providerKeys.nvidia,
-			models: nvidiaModels,
+			models: modelsData.nvidia || [],
 			defaultBase: "https://integrate.api.nvidia.com/v1",
 		},
 		{
 			id: "gemini",
 			keyData: providerKeys.gemini,
-			models: geminiModels,
+			models: modelsData.gemini || [],
 			defaultBase: "https://generativelanguage.googleapis.com/v1beta/openai/",
 		},
-		{ id: "openai", keyData: providerKeys.openai, models: openaiModels, defaultBase: "https://api.openai.com/v1" },
+		{ id: "openai", keyData: providerKeys.openai, models: modelsData.openai || [], defaultBase: "https://api.openai.com/v1" },
 		{
 			id: "openrouter",
 			keyData: providerKeys.openrouter,
-			models: openrouterModels,
+			models: modelsData.openrouter || [],
 			defaultBase: "https://openrouter.ai/api/v1",
 		},
 		{
 			id: "poolside",
 			keyData: providerKeys.poolside,
-			models: poolsideModels,
+			models: modelsData.poolside || [],
 			defaultBase: "https://api.poolside.ai/v1",
 		},
-		{ id: "vercel", keyData: providerKeys.vercel, models: vercelModels, defaultBase: "https://ai-gateway.vercel.sh" },
-		{ id: "zenmux", keyData: providerKeys.zenmux, models: zenmuxModels, defaultBase: "https://zenmux.ai/api/v1" },
+		{ id: "vercel", keyData: providerKeys.vercel, models: modelsData.vercel || [], defaultBase: "https://ai-gateway.vercel.sh" },
+		{ id: "zenmux", keyData: providerKeys.zenmux, models: modelsData.zenmux || [], defaultBase: "https://zenmux.ai/api/v1" },
 	]
 
 	for (const p of providersMap) {
@@ -186,10 +203,7 @@ export function getCustomProvidersConfig(): Record<
 					cm.contextWindow >= 1048576
 						? `${Math.round(cm.contextWindow / 1048576)}M`
 						: `${Math.round(cm.contextWindow / 1024)}k`
-				const showProvider = process.env.SHOW_PROVIDER_NAMES !== "false"
-				const displayName = showProvider
-					? `${cm.name || cm.id} (${p.id}) - ${tokensStr}`
-					: `${cm.name || cm.id} - ${tokensStr}`
+				const displayName = cm.name || cm.id
 
 				const customPiModel: PiModelConfig = {
 					id: cm.id,

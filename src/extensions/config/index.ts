@@ -7,7 +7,7 @@ export default function configExtension(pi: ExtensionAPI): void {
 	if (!agentDir) return
 	const modelsJsonPath = resolve(agentDir, "models.json")
 
-	pi.registerCommand("config AI", {
+	pi.registerCommand("config", {
 		description: "Configure AI API Keys (Providers)",
 		handler: async (_args, ctx) => {
 			await configureLocalProviderKeys(ctx, modelsJsonPath)
