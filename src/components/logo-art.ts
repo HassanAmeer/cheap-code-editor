@@ -116,10 +116,10 @@ export function buildLogoLines(theme: Theme): string[] {
 	}
 
 	return [
-		`${G}     █▀${RST_FG}  ${L}${textLines[0]}${RST_FG}`,
-		`${L}    ███  ${textLines[1]}${RST_FG}`,
-		`${L}▄  ▄███  ${textLines[2]}${RST_FG}`,
-		`${L}▀████▀   ${textLines[3]}${RST_FG}`,
+		`  ${L}▄███▄${RST_FG}  ${L}${textLines[0]}${RST_FG}`,
+		` ${L}██▀ ▀██${RST_FG} ${L}${textLines[1]}${RST_FG}`,
+		` ${L}██▄${RST_FG}${G}$${RST_FG}${L}▄██${RST_FG} ${L}${textLines[2]}${RST_FG}`,
+		`  ${L}▀███▀${RST_FG}  ${L}${textLines[3]}${RST_FG}`,
 	]
 }
 

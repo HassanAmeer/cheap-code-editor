@@ -1,7 +1,7 @@
 import { modelsAreEqual } from "@earendil-works/pi-ai"
 import { InteractiveMode, ModelSelectorComponent, getSelectListTheme } from "@earendil-works/pi-coding-agent"
 import { Spacer, Text, getKeybindings } from "@earendil-works/pi-tui"
-import { ANSI, fg, semanticFg, resolvedAccentFg, TEAL_FG, RST } from "./ansi.js"
+import { ANSI, RST, TEAL_FG, fg, resolvedAccentFg, semanticFg } from "./ansi.js"
 import { modelInfoMap } from "./providers/index.js"
 
 // ---------------------------------------------------------------------------
@@ -280,7 +280,7 @@ modelSelectorProto.updateList = function (this: any) {
 				const listTheme = getSelectListTheme()
 
 				const displayName = item._isMultiModel ? "multi-model" : item.model.name || item.id
-				
+
 				let cellText = ""
 				let rawLength = 0
 

@@ -8,7 +8,7 @@ export class TipRow {
 	constructor(
 		private readonly getTip: () => TipCandidate | undefined,
 		private readonly theme: Theme,
-	) { }
+	) {}
 
 	render(width: number): string[] {
 		const tip = this.getTip()
@@ -16,7 +16,7 @@ export class TipRow {
 		return renderTipRow(tip, this.theme, width)
 	}
 
-	invalidate(): void { }
+	invalidate(): void {}
 }
 
 export function renderTipRow(tip: TipCandidate, theme: Theme, width: number): string[] {

@@ -31,7 +31,13 @@ export class PromptEditor extends CustomEditor {
 
 	private readonly isWorking: () => boolean
 
-	constructor(tui: TUI, editorTheme: EditorTheme, keybindings: KeybindingsManager, appTheme: Theme, isWorking: () => boolean = () => false) {
+	constructor(
+		tui: TUI,
+		editorTheme: EditorTheme,
+		keybindings: KeybindingsManager,
+		appTheme: Theme,
+		isWorking: () => boolean = () => false,
+	) {
 		super(tui, editorTheme, keybindings)
 		this.appTheme = appTheme
 		this.kb = keybindings

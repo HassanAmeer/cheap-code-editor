@@ -40,9 +40,10 @@ function mapToPiModelConfig(model: any, providerId: string): PiModelConfig {
 
 	let tokensLabel = model.tokens
 	if (!tokensLabel && model.context_size) {
-		tokensLabel = model.context_size >= 1048576
-			? `${Math.round(model.context_size / 1048576)}M`
-			: `${Math.round(model.context_size / 1024)}k`
+		tokensLabel =
+			model.context_size >= 1048576
+				? `${Math.round(model.context_size / 1048576)}M`
+				: `${Math.round(model.context_size / 1024)}k`
 	}
 	if (!tokensLabel) tokensLabel = "8k"
 
@@ -96,7 +97,7 @@ export function getCustomProvidersConfig(): Record<
 		if (existsSync(overridesPath)) {
 			overrides = JSON.parse(readFileSync(overridesPath, "utf-8"))
 		}
-	} catch (e) { }
+	} catch (e) {}
 
 	let providerOverrides = overrides.providers || {}
 	const modelOverrides = overrides.models || {}
@@ -126,7 +127,12 @@ export function getCustomProvidersConfig(): Record<
 			models: modelsData.gemini || [],
 			defaultBase: "https://generativelanguage.googleapis.com/v1beta/openai/",
 		},
-		{ id: "openai", keyData: providerKeys.openai, models: modelsData.openai || [], defaultBase: "https://api.openai.com/v1" },
+		{
+			id: "openai",
+			keyData: providerKeys.openai,
+			models: modelsData.openai || [],
+			defaultBase: "https://api.openai.com/v1",
+		},
 		{
 			id: "openrouter",
 			keyData: providerKeys.openrouter,
@@ -139,8 +145,18 @@ export function getCustomProvidersConfig(): Record<
 			models: modelsData.poolside || [],
 			defaultBase: "https://api.poolside.ai/v1",
 		},
-		{ id: "vercel", keyData: providerKeys.vercel, models: modelsData.vercel || [], defaultBase: "https://ai-gateway.vercel.sh" },
-		{ id: "zenmux", keyData: providerKeys.zenmux, models: modelsData.zenmux || [], defaultBase: "https://zenmux.ai/api/v1" },
+		{
+			id: "vercel",
+			keyData: providerKeys.vercel,
+			models: modelsData.vercel || [],
+			defaultBase: "https://ai-gateway.vercel.sh",
+		},
+		{
+			id: "zenmux",
+			keyData: providerKeys.zenmux,
+			models: modelsData.zenmux || [],
+			defaultBase: "https://zenmux.ai/api/v1",
+		},
 	]
 
 	for (const p of providersMap) {
