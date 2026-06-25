@@ -65,7 +65,7 @@ describe("LogoHeader", () => {
 		}
 
 		// Contains logo lines in the left column
-		const logoRows = lines.slice(1, -1).filter((l) => stripAnsi(l).includes("█"))
+		const logoRows = lines.slice(1, -1).filter((l) => stripAnsi(l).includes("$$"))
 		expect(logoRows.length).toBeGreaterThanOrEqual(3)
 
 		// Version and folder appear on one info line, branch on a separate line
@@ -174,7 +174,7 @@ describe("LogoHeader", () => {
 		// Find logo rows
 		const logoIndices: number[] = []
 		for (let i = 1; i < lines.length - 1; i++) {
-			if (stripAnsi(lines[i]).includes("█")) {
+			if (stripAnsi(lines[i]).includes("$$")) {
 				logoIndices.push(i)
 			}
 		}
@@ -226,7 +226,7 @@ describe("LogoHeader", () => {
 		expect(infoEnd).toBeLessThan(leftCol.length - 1)
 
 		// A logo row should have the same total left column width as the info row
-		const logoRow = lines.findIndex((l) => stripAnsi(l).includes("█"))
+		const logoRow = lines.findIndex((l) => stripAnsi(l).includes("$$"))
 		const strippedLogo = stripAnsi(lines[logoRow])
 		const logoParts = strippedLogo.split("│")
 		expect(logoParts[1].length).toBe(leftCol.length)
@@ -255,7 +255,7 @@ describe("LogoHeader", () => {
 
 		// Extract left column width from a logo row in both renders
 		const getLeftColWidth = (lines: string[]): number => {
-			const logoRow = lines.find((l) => stripAnsi(l).includes("█"))
+			const logoRow = lines.find((l) => stripAnsi(l).includes("$$"))
 			expect(logoRow).toBeDefined()
 			if (!logoRow) return 0
 			const parts = stripAnsi(logoRow).split("│")
